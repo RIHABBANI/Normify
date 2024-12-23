@@ -24,6 +24,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::post('/login', [UserController::class, 'login']);
+Route::post('/logout', [UserController::class, 'logout']);
 Route::post('/register', [UserController::class, 'register']);
 
 Route::prefix('user')->group(function () {
@@ -31,17 +32,17 @@ Route::prefix('user')->group(function () {
     Route::get('/{id}', [UserController::class, 'showById']);
 });
 
-Route::prefix('norm')->group(function () {
+Route::prefix('norms')->group(function () {
     Route::get('/', [NormController::class, 'show']);
     Route::get('/{id}', [NormController::class, 'showById']);
 });
 
-Route::prefix('norm-chapter')->group(function () {
+Route::prefix('norm-chapters')->group(function () {
     Route::get('/', [NormChapterController::class, 'show']);
     Route::get('/{id}', [NormChapterController::class, 'showById']);
 });
 
-Route::prefix('norm-sub-chapter')->group(function () {
+Route::prefix('norm-sub-chapters')->group(function () {
     Route::get('/', [NormSubChapterController::class, 'show']);
     Route::get('/{id}', [NormSubChapterController::class, 'showById']);
 });

@@ -17,5 +17,5 @@ class Norm extends Model
         'norm_complet_name',
         'norm_version',
         'norm_pub_date',
-    ];
+    ]; 
 }
