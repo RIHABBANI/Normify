@@ -12,7 +12,7 @@ class NormSubChapter extends Model
     protected $table = 'norm_sub_chapters';
 
     protected $fillable = [
-        'chapter_id',
+        'norm_chapter_id',
         'sub_chapter_title',
     ];
 }

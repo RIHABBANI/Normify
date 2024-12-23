@@ -1,0 +1,280 @@
+[
+    {
+        "norm_sub_chapter_id": 1,
+        "exigencies": [
+            {
+                "exigency_title": "Analyser le contexte externe",
+                "exigency_description": "Identifier et analyser les conditions externes (légales, technologiques, concurrentielles, culturelles, sociales, économiques) qui affectent le système SST."
+            },
+            {
+                "exigency_title": "Analyser le contexte interne",
+                "exigency_description": "Identifier et analyser les facteurs internes (gouvernance, structure organisationnelle, rôles, culture, ressources) impactant le système SST."
+            },
+            {
+                "exigency_title": "Documenter les enjeux pertinents",
+                "exigency_description": "Maintenir des informations documentées sur les enjeux pertinents et leur évolution."
+            }
+        ]
+    },
+    {
+        "norm_sub_chapter_id": 2,
+        "exigencies": [
+            {
+                "exigency_title": "Identifier les parties intéressées",
+                "exigency_description": "Déterminer toutes les parties intéressées pertinentes pour le système SST (travailleurs, sous-traitants, clients, autorités...)"
+            },
+            {
+                "exigency_title": "Analyser les besoins et attentes",
+                "exigency_description": "Identifier les besoins et attentes de chaque partie intéressée pertinente."
+            },
+            {
+                "exigency_title": "Déterminer les exigences applicables",
+                "exigency_description": "Définir lesquels de ces besoins et attentes deviennent des exigences légales et autres exigences."
+            }
+        ]
+    },
+    {
+        "norm_sub_chapter_id": 3,
+        "exigencies": [
+            {
+                "exigency_title": "Définir les limites physiques",
+                "exigency_description": "Déterminer les limites physiques et l'applicabilité du système SST (sites, activités, produits et services)."
+            },
+            {
+                "exigency_title": "Considérer les facteurs externes et internes",
+                "exigency_description": "Prendre en compte les enjeux externes et internes dans la détermination du périmètre."
+            },
+            {
+                "exigency_title": "Documenter le périmètre",
+                "exigency_description": "Maintenir le périmètre comme information documentée, incluant les activités, produits et services couverts."
+            }
+        ]
+    },
+    {
+        "norm_sub_chapter_id": 4,
+        "exigencies": [
+            {
+                "exigency_title": "Établir les processus nécessaires",
+                "exigency_description": "Établir tous les processus nécessaires et leurs interactions pour le système SST."
+            },
+            {
+                "exigency_title": "Mettre en œuvre le système",
+                "exigency_description": "Mettre en œuvre le système selon les exigences de la norme."
+            },
+            {
+                "exigency_title": "Tenir à jour le système",
+                "exigency_description": "Maintenir et améliorer continuellement le système de management SST."
+            }
+        ]
+    },
+    {
+        "norm_sub_chapter_id": 5,
+        "exigencies": [
+            {
+                "exigency_title": "Démontrer l'engagement",
+                "exigency_description": "La direction doit démontrer son leadership et engagement envers le système SST."
+            },
+            {
+                "exigency_title": "Assumer la responsabilité",
+                "exigency_description": "Assumer la responsabilité et l'obligation de rendre compte de la prévention des accidents."
+            },
+            {
+                "exigency_title": "Établir la politique et objectifs",
+                "exigency_description": "S'assurer que la politique et les objectifs sont établis et compatibles avec l'orientation stratégique."
+            },
+            {
+                "exigency_title": "Intégrer les exigences",
+                "exigency_description": "Intégrer les exigences du système dans les processus métier."
+            },
+            {
+                "exigency_title": "Fournir les ressources",
+                "exigency_description": "S'assurer de la disponibilité des ressources nécessaires."
+            }
+        ]
+    },
+    {
+        "norm_sub_chapter_id": 6,
+        "exigencies": [
+            {
+                "exigency_title": "Établir la politique",
+                "exigency_description": "Établir une politique SST appropriée à l'organisation."
+            },
+            {
+                "exigency_title": "Inclure les engagements",
+                "exigency_description": "Inclure l'engagement pour la SST et l'amélioration continue."
+            },
+            {
+                "exigency_title": "Communiquer la politique",
+                "exigency_description": "Communiquer la politique à tous les niveaux de l'organisation."
+            }
+        ]
+    },
+    {
+        "norm_sub_chapter_id": 7,
+        "exigencies": [
+            {
+                "exigency_title": "Attribuer les responsabilités",
+                "exigency_description": "Attribuer et communiquer les responsabilités pour le système SST."
+            },
+            {
+                "exigency_title": "Définir les autorités",
+                "exigency_description": "Définir les autorités nécessaires pour les rôles pertinents."
+            },
+            {
+                "exigency_title": "Documenter les rôles",
+                "exigency_description": "Maintenir les informations documentées sur les responsabilités et autorités."
+            }
+        ]
+    },
+    {
+        "norm_sub_chapter_id": 8,
+        "exigencies": [
+            {
+                "exigency_title": "Établir les processus de consultation",
+                "exigency_description": "Établir des processus pour la consultation des travailleurs à tous les niveaux."
+            },
+            {
+                "exigency_title": "Fournir les mécanismes",
+                "exigency_description": "Fournir les mécanismes, le temps et les ressources pour la consultation."
+            },
+            {
+                "exigency_title": "Assurer la participation",
+                "exigency_description": "Assurer la participation des travailleurs non-managériaux aux décisions SST."
+            }
+        ]
+    },
+    {
+        "norm_sub_chapter_id": 9,
+        "exigencies": [
+            {
+                "exigency_title": "Considérer les enjeux",
+                "exigency_description": "Prendre en compte les enjeux, exigences et risques dans la planification."
+            },
+            {
+                "exigency_title": "Déterminer les risques",
+                "exigency_description": "Déterminer les risques et opportunités pour le système SST."
+            }
+        ]
+    },
+    {
+        "norm_sub_chapter_id": 10,
+        "exigencies": [
+            {
+                "exigency_title": "Évaluer les risques",
+                "exigency_description": "Évaluer les risques SST et autres risques pour le système."
+            },
+            {
+                "exigency_title": "Identifier les dangers",
+                "exigency_description": "Identifier les dangers de manière continue et proactive."
+            },
+            {
+                "exigency_title": "Établir la méthodologie",
+                "exigency_description": "Établir une méthodologie pour l'évaluation des risques."
+            }
+        ]
+    },
+    {
+        "norm_sub_chapter_id": 11,
+        "exigencies": [
+            {
+                "exigency_title": "Évaluer la conformité",
+                "exigency_description": "Mettre en place des processus pour évaluer la conformité aux exigences légales et autres exigences pertinentes."
+            },
+            {
+                "exigency_title": "Conserver les preuves",
+                "exigency_description": "Maintenir des preuves documentées de la conformité."
+            }
+        ]
+    },
+    {
+        "norm_sub_chapter_id": 12,
+        "exigencies": [
+            {
+                "exigency_title": "Planifier et gérer les audits",
+                "exigency_description": "Établir un programme d'audit interne couvrant la portée, les fréquences et les méthodes."
+            },
+            {
+                "exigency_title": "Évaluer les performances",
+                "exigency_description": "S'assurer que les audits internes évaluent efficacement les performances du système SST."
+            }
+        ]
+    },
+    {
+        "norm_sub_chapter_id": 13,
+        "exigencies": [
+            {
+                "exigency_title": "Évaluer les objectifs",
+                "exigency_description": "Mettre en place un processus pour établir, surveiller et atteindre les objectifs SST."
+            },
+            {
+                "exigency_title": "Inclure des indicateurs",
+                "exigency_description": "Inclure des indicateurs mesurables dans les objectifs."
+            }
+        ]
+    },
+    {
+        "norm_sub_chapter_id": 14,
+        "exigencies": [
+            {
+                "exigency_title": "Planifier les actions nécessaires",
+                "exigency_description": "Identifier les actions nécessaires pour traiter les risques et opportunités."
+            },
+            {
+                "exigency_title": "Surveiller les progrès",
+                "exigency_description": "Mettre en place des moyens pour surveiller et évaluer les progrès réalisés dans la mise en œuvre des actions planifiées."
+            }
+        ]
+    },
+    {
+        "norm_sub_chapter_id": 15,
+        "exigencies": [
+            {
+                "exigency_title": "Définir les ressources nécessaires",
+                "exigency_description": "Identifier et allouer les ressources nécessaires pour atteindre les objectifs SST."
+            },
+            {
+                "exigency_title": "Engager les parties concernées",
+                "exigency_description": "Impliquer activement les parties intéressées dans la réalisation des objectifs."
+            }
+        ]
+    },
+    {
+        "norm_sub_chapter_id": 16,
+        "exigencies": [
+            {
+                "exigency_title": "Fournir des ressources adaptées",
+                "exigency_description": "Mettre à disposition des ressources adaptées aux activités SST."
+            },
+            {
+                "exigency_title": "Former les équipes",
+                "exigency_description": "Former les équipes pour qu'elles disposent des compétences nécessaires."
+            }
+        ]
+    },
+    {
+        "norm_sub_chapter_id": 17,
+        "exigencies": [
+            {
+                "exigency_title": "Prévoir les changements",
+                "exigency_description": "Anticiper les changements potentiels pouvant affecter le système SST."
+            },
+            {
+                "exigency_title": "Adapter les processus",
+                "exigency_description": "Adapter les processus et activités pour maintenir la conformité lors des changements."
+            }
+        ]
+    },
+    {
+        "norm_sub_chapter_id": 18,
+        "exigencies": [
+            {
+                "exigency_title": "Établir des critères de gestion des incidents",
+                "exigency_description": "Développer des plans et critères pour traiter les incidents et accidents liés à la SST."
+            },
+            {
+                "exigency_title": "Analyser les non-conformités",
+                "exigency_description": "Mettre en place un processus pour identifier et corriger les non-conformités."
+            }
+        ]
+    }
+]

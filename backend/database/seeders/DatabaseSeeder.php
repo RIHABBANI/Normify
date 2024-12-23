@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             NormSeeder::class,
             NormChapterSeeder::class,
+            NormSubChapterSeeder::class,
         ]);
     }
 }

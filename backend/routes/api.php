@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\NormController;
 use App\Http\Controllers\NormChapterController;
 use App\Http\Controllers\NormSubChapterController;
+use App\Http\Controllers\ExigencyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,7 +43,15 @@ Route::prefix('norm-chapters')->group(function () {
     Route::get('/{id}', [NormChapterController::class, 'showById']);
 });
 
+Route::get('/norm-sub-chapters/chapter', [NormSubChapterController::class, 'showByChapter']);
+
 Route::prefix('norm-sub-chapters')->group(function () {
     Route::get('/', [NormSubChapterController::class, 'show']);
     Route::get('/{id}', [NormSubChapterController::class, 'showById']);
+});
+
+Route::prefix('exigencies')->group(function () {
+    Route::get('/', [ExigencyController::class, 'show']);
+    Route::get('/{id}', [ExigencyController::class, 'showById']);
+    Route::get('/chapter/subchapter', [ExigencyController::class, 'showByChapterAndSubChapter']);
 });

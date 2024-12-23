@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('norm_sub_chapters', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('chapter_id')->constrained('norm_chapters')->references('id')->onDelete('cascade')->onUpdate('restrict');
-            $table->string('sub_chapter_ref', 100);
+            $table->foreignId('norm_chapter_id')->constrained('norm_chapters')->references('id')->onDelete('cascade')->onUpdate('restrict');
             $table->string('sub_chapter_title', 255);
             $table->timestamps();
         });
