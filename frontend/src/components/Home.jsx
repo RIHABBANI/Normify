@@ -1,17 +1,19 @@
-import React from 'react'
+import React from 'react';
 import Sidebar from './Common/Sidebar';
-import '../index.css';
+import { Outlet } from 'react-router-dom';
 
 const Home = () => {
   return (
-    <div className="flex">
+    <div className="flex h-screen">
+      {/* Sidebar */}
       <Sidebar />
-      <div className="flex-grow p-5">
-        <h1 className="text-2xl font-semibold">Dashboard</h1>
-        <p>Welcome to the admin panel</p>
+      
+      {/* Main Content */}
+      <div className="flex-grow bg-gray-100 p-6 overflow-y-auto ml-48">
+        <Outlet />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

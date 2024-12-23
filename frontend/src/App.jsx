@@ -1,19 +1,13 @@
-// frontend/src/App.jsx
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Login from './components/Users/Login';
-import Home from './components/Home';
+import { BrowserRouter as Router } from 'react-router-dom';
+import AppRoutes from './Routes';
 
-function App() {
+const App = () => {
   return (
-    <Router>  
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Home />} />
-      </Routes>
+    <Router>
+      <AppRoutes />
     </Router>
   );
-}
+};
 
 export default App;
-

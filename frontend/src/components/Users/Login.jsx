@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import API from '../../api/axios'; 
 import { useNavigate, useLocation } from "react-router-dom";
 import '../../index.css'; 
-
+import { login } from '../../api/User/user-api';
 
 const Login = () => {
   const Navigate = useNavigate();
@@ -23,22 +22,15 @@ const Login = () => {
     }
 
     try {
-      const response = await API.post('/login', credentials);
-      console.log('Login response:', response.data);
-
-      const { token } = response.data;
-      localStorage.setItem('token', token); 
-      console.log('Logged in successfully');
-
-      // Redirect to dashboard
-      Navigate('/dashboard');
-    } catch (err) {
-      console.error('Error logging in:', err);
-      if (err.response) {
-        setError(err.response.data.message || 'An error occurred.');
-      } else {
-        setError('Network error. Please try again.');
+      const response = await login(credentials.email, credentials.password)
+      if (response) {
+        const token = response.token;
+        localStorage.setItem('token', token);
+        Navigate('/dashboard');
       }
+    }
+    catch (err) {
+      setError(err.message);
     }
   };
 
