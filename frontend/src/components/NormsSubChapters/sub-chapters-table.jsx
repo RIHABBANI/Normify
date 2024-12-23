@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import '../../index.css';
-import {getNormSubChapters} from '../../api/NormSubChapter/norm-sub-chapter-api';
+import {getNormSubChapterByChapter} from '../../api/NormSubChapter/norm-sub-chapter-api';
 
 export const NormsSubChaptersTable = () => {
     const [normSubChapters, setNormSubchapter] = useState([]);
@@ -9,7 +9,7 @@ export const NormsSubChaptersTable = () => {
     useEffect(() => {
         const fetchNormSubChapters = async () => {
             try {
-                const data = await getNormSubChapters();
+                const data = await getNormSubChapterByChapter();
                 console.log(data);
                 setNormSubchapter(data);
             } catch (err) {
@@ -45,7 +45,7 @@ export const NormsSubChaptersTable = () => {
                                 </div>
                             </th>
                             <th scope="col" className="px-4 py-2">id</th>
-                            <th scope="col" className="px-4 py-2">Sub Chapter Reference</th>
+                            <th scope="col" className="px-4 py-2">Chapter Title</th>
                             <th scope="col" className="px-4 py-2">Sub Chapter Title</th>
                             <th scope="col" className="px-4 py-2">Actions</th>
                         </tr>
@@ -76,7 +76,7 @@ export const NormsSubChaptersTable = () => {
                                 >
                                     {normSubChapter.id}
                                 </th>
-                                <td className="px-4 py-2">{normSubChapter.sub_chapter_ref}</td>
+                                <td className="px-4 py-2">{normSubChapter.chapter_title}</td>
                                 <td className="px-4 py-2">{normSubChapter.sub_chapter_title}</td>
                                 <td className="flex justify-center items-center px-4 py-2">
                                     <a
