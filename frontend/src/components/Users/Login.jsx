@@ -68,10 +68,9 @@ export const Login = () => {
                   onChange={handleChange}
                   placeholder="Enter your password"
                   className="w-full p-2 rounded border border-gray-300"
-                  
                 />
               </div>
-              <button type="submit" className="w-full p-2 rounded bg-blue-500 text-white text-lg">Login</button>
+              <button type="submit" className="w-full p-2 rounded bg-gray-500 text-white text-lg">Login</button>
             </form>
           </div>
         </div>
