@@ -13,6 +13,11 @@ class Action extends Model
 
     protected $fillable = [
         'conformity_id',
-        'action',
+        'action_title',
+        'action_description',
+        'action_start_date',
+        'action_end_date',
+        'action_status',    
+        'action_priority',
     ];
 }

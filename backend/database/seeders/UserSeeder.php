@@ -16,15 +16,15 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         $userInfo = UserInfo::create([
-            'first_name' => 'Idriss',
-            'last_name' => 'Elhouari',
+            'first_name' => 'Normify',
+            'last_name' => 'Admin',
             'phone' => '0666666666',
             'matriculation' => '123456789',
         ]);
 
         $user = User::create([
             'user_info_id' => $userInfo->id,
-            'email' => 'idrisselhouarii@gmail.com',
+            'email' => 'normifyteam@gmail.com',
             'password' => Hash::make('password')
         ]);
     }

@@ -8,6 +8,7 @@ use App\Http\Controllers\NormController;
 use App\Http\Controllers\NormChapterController;
 use App\Http\Controllers\NormSubChapterController;
 use App\Http\Controllers\ExigencyController;
+use App\Http\Controllers\ActionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,4 +56,9 @@ Route::prefix('exigencies')->group(function () {
     Route::get('/', [ExigencyController::class, 'show']);
     Route::get('/{id}', [ExigencyController::class, 'showById']);
     Route::get('/chapter/subchapter', [ExigencyController::class, 'showByChapterAndSubChapter']);
+});
+
+Route::prefix('actions')->group(function () {
+    Route::get('/', [ActionController::class, 'show']);
+    Route::get('/{id}', [ActionController::class, 'showById']);
 });
