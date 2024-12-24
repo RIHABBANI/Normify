@@ -69,7 +69,7 @@ export const register = async (formData) => {
 export const getUser = async () => {
     try {
         const response = await API.get('/user');
-        return response.data;
+        return response.data.data;
     }
     catch (err) {
         if (err.response) {

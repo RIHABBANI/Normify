@@ -1,27 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import '../../index.css';
-import { getNorms } from '../../api/Norm/norm-api';
+import { getUser } from '../../api/User/user-api';
 
-export const NormTable = () => {
-    // State to store norms
-    const [norms, setNorms] = useState([]);
+
+export const UsersTable = () => {
+    const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // Fetch norms on component mount
     useEffect(() => {
-        const fetchNorms = async () => {
+        const fetchUsers = async () => {
             try {
-                const data = await getNorms(); // Await the API call
+                const data = await getUser();
                 console.log(data);
-                setNorms(data); // Set the fetched data to the state
+                setUsers(data);
             } catch (err) {
-                console.error('Error fetching norms:', err.message);
+                console.error('Error fetching users:', err.message);
             } finally {
-                setLoading(false); // Stop loading after the operation completes
+                setLoading(false);
             }
         };
-
-        fetchNorms();
+        fetchUsers();
     }, []);
 
     // Show a loading indicator while fetching data
@@ -47,44 +45,41 @@ export const NormTable = () => {
                                 </label>
                             </div>
                         </th>
-                        <th scope="col" className="px-4 py-2">Reference</th>
-                        <th scope="col" className="px-4 py-2">Abbre Name</th>
-                        <th scope="col" className="px-4 py-2">Name</th>
-                        <th scope="col" className="px-4 py-2">Version</th>
-                        <th scope="col" className="px-4 py-2">Publication Date</th>
+                        <th scope="col" className="px-4 py-2">id</th>
+                        <th scope="col" className="px-4 py-2">First Name</th>
+                        <th scope="col" className="px-4 py-2">Last Name</th>
+                        <th scope="col" className="px-4 py-2">Phone</th>
+                        <th scope="col" className="px-4 py-2">Matriculation</th>
+                        <th scope="col" className="px-4 py-2">Email</th>
                         <th scope="col" className="px-4 py-2">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {norms.map((norm, index) => (
+                    {users.map((user, index) => (
                         <tr
                             key={index}
                             className={`${
-                                index % 2 === 0 ? "bg-gray-100" : "bg-white"
-                            } border-b border-gray-300 hover:bg-gray-200`}
+                                index % 2 === 0 ? 'bg-gray-100' : 'bg-white'
+                            } text-sm`}
                         >
-                            <td className="w-4 p-4">
+                            <td className="p-3 border-gray-300">
                                 <div className="flex items-center">
                                     <input
-                                        id={`checkbox-table-search-${index}`}
+                                        id={`checkbox-${user.id}`}
                                         type="checkbox"
-                                        className="w-4 h-4 text-blue-500 bg-gray-200 border-gray-400 rounded focus:ring-2 focus:ring-blue-400"
+                                        className="w-4 h-4 text-blue-500 bg-gray-200 rounded focus:ring-2 focus:ring-blue-400"
                                     />
-                                    <label htmlFor={`checkbox-table-search-${index}`} className="sr-only">
+                                    <label htmlFor={`checkbox-${user.id}`} className="sr-only">
                                         checkbox
                                     </label>
                                 </div>
                             </td>
-                            <th
-                                scope="row"
-                                className="px-4 py-2 font-semibold text-gray-900 whitespace-nowrap"
-                            >
-                                {norm.norm_ref}
-                            </th>
-                            <td className="px-4 py-2">{norm.norm_abbreviation_name}</td>
-                            <td className="px-4 py-2">{norm.norm_complet_name}</td>
-                            <td className="px-4 py-2">{norm.norm_version}</td>
-                            <td className="px-4 py-2">{norm.norm_pub_date}</td>
+                            <td className="px-4 py-2">{user.id}</td>
+                            <td className="px-4 py-2">{user.first_name}</td>
+                            <td className="px-4 py-2">{user.last_name}</td>
+                            <td className="px-4 py-2">{user.phone}</td>
+                            <td className="px-4 py-2">{user.matriculation}</td>
+                            <td className="px-4 py-2">{user.email}</td>
                             <td className="px-4 py-2">
                                 <div className="flex space-x-2">
                                     <button className="text-gray-500 hover:text-blue-600">
@@ -99,13 +94,12 @@ export const NormTable = () => {
                                     </button>
                                 </div>
                             </td>
-
                         </tr>
                     ))}
                 </tbody>
             </table>
         </div>
     );
-};
+}
 
-export default NormTable;
+export default UsersTable;

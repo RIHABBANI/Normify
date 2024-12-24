@@ -9,6 +9,7 @@ import { ExigenciesTable } from './components/Exigencies/exigencies-table';
 import { DiagnosticsTable } from './components/Diagnostics/diagnostic-table';
 
 import { Login } from './components/Users/Login';
+import UsersTable from './components/Users/users-table';
 
 // ProtectedRoute Component
 const ProtectedRoute = ({ children }) => {
@@ -29,6 +30,7 @@ const AppRoutes = () => {
         }
       >
         <Route index path="dashboard" element={<Dashboard />} /> {/* Default route */}
+        <Route path="users" element={<UsersTable />} />
         <Route path="norms" element={<NormTable />} />
         <Route path="norms-chapters" element={<NormsChaptersTable />} />
         <Route path="norms-sub-chapters" element={<NormsSubChaptersTable />} />
