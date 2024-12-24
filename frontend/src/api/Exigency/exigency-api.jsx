@@ -4,7 +4,7 @@ import API from '../axios';
 export const getAllExigencies = async () => {
     try {
         const response = await API.get('/exigencies');
-        return response.data;
+        return response.data.data;
     }
     catch (error) {
         if (error.response) {
@@ -44,3 +44,5 @@ export const getExigencyBySubChapterAndChapter = async () => {
         }
     }
 }
+
+// Get exigency for diagnostic

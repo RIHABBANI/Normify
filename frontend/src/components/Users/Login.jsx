@@ -3,11 +3,11 @@ import { useNavigate, useLocation } from "react-router-dom";
 import '../../index.css'; 
 import { login } from '../../api/User/user-api';
 
-const Login = () => {
+export const Login = () => {
   const Navigate = useNavigate();
   const [credentials, setCredentials] = useState({ email: '', password: '' });
   const [error, setError] = useState(null);
-
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setCredentials({ ...credentials, [name]: value });
@@ -20,14 +20,20 @@ const Login = () => {
       setError('Both email and password are required.');
       return;
     }
-
     try {
       const response = await login(credentials.email, credentials.password)
-      if (response) {
+      
+      if (response.success && response.token) {
         const token = response.token;
+        const authData = JSON.stringify(response.user);
+
+        localStorage.setItem('authData', authData);
         localStorage.setItem('token', token);
+
         Navigate('/dashboard');
       }
+
+      setError(response.message);
     }
     catch (err) {
       setError(err.message);
@@ -62,7 +68,7 @@ const Login = () => {
                   onChange={handleChange}
                   placeholder="Enter your password"
                   className="w-full p-2 rounded border border-gray-300"
-                  required
+                  
                 />
               </div>
               <button type="submit" className="w-full p-2 rounded bg-blue-500 text-white text-lg">Login</button>

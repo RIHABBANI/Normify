@@ -1,15 +1,23 @@
 import API from '../axios';
 
+// get user token
+export const getToken = () => {
+    return localStorage.getItem('token');
+}
+
+// Get user data
+export const getUserData = () => {
+    const authData = localStorage.getItem('authData');
+    return JSON.parse(authData);
+}
+
 // Login function that sends a POST request to the API
 export const login = async (email, password) => {
     try {
         const response = await API.post('/login', { email, password });
-        const authData = response.data;
-        const userData = authData.user;
-        const token = authData.token;
 
-    
-        return { user: userData, token };
+        console.log(response.data);
+        return response.data;
 
     } catch (err) {
         if (err.response) {
@@ -21,7 +29,7 @@ export const login = async (email, password) => {
 }
 
 // Logout function that removes the token from localStorage
-export const logout = async() => {
+export const Logout = async() => {
     try {
         await API.post('/logout');
         localStorage.removeItem('token');
