@@ -12,7 +12,7 @@ const Sidebar = () => {
         <>
             <aside className="fixed top-0 left-0 z-40 w-48 h-screen border transition-transform -translate-x-full sm:translate-x-0 bg-white" aria-label="Sidebar">
                 <div className="flex items-center justify-center py-4">
-                    <Link to="/" className="flex items-center">
+                    <Link to="/dashboard" className="flex items-center">
                         <span className="self-center text-xl font-semibold whitespace-nowrap text-gray-800">Normify</span>
                     </Link>
                 </div>
@@ -21,14 +21,14 @@ const Sidebar = () => {
                     <ul className="space-y-2 font-medium">
                         <li>
                             <Link 
-                                to="/" 
+                                to="/dashboard" 
                                 className="flex items-center p-2 text-gray-800 rounded-lg hover:bg-gray-200 group"
                             >
                                 <svg className="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-800 size-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" >
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6a7.5 7.5 0 1 0 7.5 7.5h-7.5V6Z" />
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0 0 13.5 3v7.5Z" />
                                 </svg>
-                                <span className="ms-3 text-sm">Dashboard</span>
+                                <span className="ms-3 text-sm">Home</span>
                             </Link>  
                         </li>
                         <li>
@@ -95,12 +95,15 @@ const Sidebar = () => {
                             </Link> 
                         </li>
                         <li>
-                            <a href="#" className="flex items-center p-2 text-gray-800 rounded-lg hover:bg-gray-200 group">
-                                <svg className="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-800 size-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" >
+                            <Link 
+                                to="/actions" 
+                                className="flex items-center p-2 text-gray-800 rounded-lg hover:bg-gray-200 group"
+                            >
+                                 <svg className="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-800 size-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" >
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941" />
                                 </svg>
                                 <span className="ms-3 text-sm">Actions</span>
-                            </a>
+                            </Link> 
                         </li>
                         <li>
                             <Link 

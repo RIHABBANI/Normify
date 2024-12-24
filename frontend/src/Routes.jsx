@@ -7,6 +7,7 @@ import { NormsChaptersTable } from './components/NormsChapters/chapters-table';
 import { NormsSubChaptersTable } from './components/NormsSubChapters/sub-chapters-table';
 import { ExigenciesTable } from './components/Exigencies/exigencies-table';
 import { DiagnosticsTable } from './components/Diagnostics/diagnostic-table';
+import { ActionsTable } from './components/Actions/actions-table';
 
 import { Login } from './components/Users/Login';
 import UsersTable from './components/Users/users-table';
@@ -36,6 +37,8 @@ const AppRoutes = () => {
         <Route path="norms-sub-chapters" element={<NormsSubChaptersTable />} />
         <Route path="norms-exigencies" element={<ExigenciesTable />} />
         <Route path="diagnostics" element={<DiagnosticsTable />} />
+        <Route path="actions" element={<ActionsTable />} />
+        
         <Route path="*" element={<h1>Not Found</h1>} />
       </Route>
 
