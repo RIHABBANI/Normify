@@ -38,7 +38,8 @@ class ExigencyController extends Controller
                 'exigencies.exigency_description',
                 'norm_sub_chapters.sub_chapter_title',
                 'norm_chapters.chapter_title'
-            )->orderBy('exigencies.id', 'asc')
+            )
+            ->orderBy('exigencies.id', 'asc')
             ->get();
 
         return response()->json([
