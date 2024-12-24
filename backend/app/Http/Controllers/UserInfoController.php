@@ -10,7 +10,16 @@ use Illuminate\Support\Facades\Hash;
 class UserInfoController extends Controller
 {
     public function show(){
-        $userInfo = UserInfo::all();
+        $userInfo = UserInfo::join('users', 'user_infos.id', '=', 'users.user_info_id')
+            ->select(
+                'user_infos.id',
+                'user_infos.first_name',
+                'user_infos.last_name',
+                'user_infos.phone',
+                'user_infos.matriculation', 
+                'users.email'
+                )
+            ->get();
 
         return response()->json([
             'success' => true,

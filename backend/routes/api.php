@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserInfoController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\NormController;
 use App\Http\Controllers\NormChapterController;
@@ -29,8 +30,8 @@ Route::post('/logout', [UserController::class, 'logout']);
 Route::post('/register', [UserController::class, 'register']);
 
 Route::prefix('user')->group(function () {
-    Route::get('/', [UserController::class, 'show']);
-    Route::get('/{id}', [UserController::class, 'showById']);
+    Route::get('/', [UserInfoController::class, 'show']);
+    Route::get('/{id}', [UserInfoController::class, 'showById']);
 });
 
 Route::prefix('norms')->group(function () {
