@@ -5,19 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Action extends Model
+class Rame extends Model
 {
     use HasFactory;
 
-    protected $table = 'actions';
-
+    protected $primaryKey = 'ID_RAME';
     protected $fillable = [
-        'conformity_id',
-        'action_title',
-        'action_description',
-        'action_start_date',
-        'action_end_date',
-        'action_status',    
-        'action_priority',
+        'NUMERO_RAME',
+        'TYPE_RAME',
+        'DATE_MISE_EN_SERVICR_RAME'
     ];
+
+    public function raks()
+    {
+        return $this->hasMany(Rak::class, 'ID_RAME');
+    }
 }

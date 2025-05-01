@@ -5,14 +5,26 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class NormSubChapter extends Model
+class Intervention extends Model
 {
     use HasFactory;
 
-    protected $table = 'norm_sub_chapters';
-
+    protected $primaryKey = 'ID_INTERVENTION';
     protected $fillable = [
-        'norm_chapter_id',
-        'sub_chapter_title',
+        'ID_PANNE',
+        'ID_UTILISATEUR',
+        'DATE_INTERVENTION',
+        'ACTION_EFFECTUEE_INTERVENTION',
+        'DUREE_INTERVENTION'
     ];
+
+    public function panne()
+    {
+        return $this->belongsTo(Panne::class, 'ID_PANNE');
+    }
+
+    public function utilisateur()
+    {
+        return $this->belongsTo(Utilisateur::class, 'ID_UTILISATEUR');
+    }
 }

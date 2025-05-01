@@ -5,15 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Conformity extends Model
+class Rak extends Model
 {
     use HasFactory;
 
-    protected $table = 'conformities';
-
+    protected $primaryKey = 'ID_RAK';
     protected $fillable = [
-        'exigency_id',
-        'conformity',
+        'ID_RAME',
+        'NOM_RAK',
+        'EMPLACEMENT_RAK'
     ];
-    
+
+    public function rame()
+    {
+        return $this->belongsTo(Rame::class, 'ID_RAME');
+    }
+
+    public function cartes()
+    {
+        return $this->hasMany(Carte::class, 'ID_RAK');
+    }
 }

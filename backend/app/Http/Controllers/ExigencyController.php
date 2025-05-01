@@ -2,52 +2,47 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Exigency;
+use App\Models\Panne;
 use Illuminate\Http\Request;
 
-class ExigencyController extends Controller
+class PanneController extends Controller
 {
-    public function show(){
-        $exigencies = Exigency::all();
-
-        return response()->json([
-            'success' => true,
-            'flag' => 200,
-            'message' => 'Exigencies List',
-            'data' => $exigencies
-        ]);
+    public function index()
+    {
+        $pannes = Panne::all();
+        return response()->json($pannes);
     }
 
-    public function showById($id){
-        $exigency = Exigency::find($id);
-
-        return response()->json([
-            'success' => true,
-            'flaq' => 200,
-            'message' => 'This exigency retrieved successfully',
-            'data' => $exigency
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'DESCRIPTION_PANNE' => 'required|string|max:225',
+            'GRAVITE_PANNE' => 'required|string|max:225'
         ]);
-    }    
 
-    public function showByChapterAndSubChapter(){
-        $exigencies = Exigency::join('norm_sub_chapters', 'exigencies.norm_sub_chapter_id', '=', 'norm_sub_chapters.id')
-            ->join('norm_chapters', 'norm_sub_chapters.norm_chapter_id', '=', 'norm_chapters.id')
-            ->select(
-                'exigencies.id',
-                'exigencies.exigency_title', 
-                'exigencies.exigency_description',
-                'norm_sub_chapters.sub_chapter_title',
-                'norm_chapters.chapter_title'
-            )
-            ->orderBy('exigencies.id', 'asc')
-            ->get();
-
-        return response()->json([
-            'success' => true,
-            'flag' => 200,
-            'message' => 'Exigencies List',
-            'data' => $exigencies
-        ]);
+        $panne = Panne::create($validated);
+        return response()->json($panne, 201);
     }
 
+    public function show(Panne $panne)
+    {
+        return response()->json($panne->load('cartes', 'interventions', 'maintenances'));
+    }
+
+    public function update(Request $request, Panne $panne)
+    {
+        $validated = $request->validate([
+            'DESCRIPTION_PANNE' => 'sometimes|string|max:225',
+            'GRAVITE_PANNE' => 'sometimes|string|max:225'
+        ]);
+
+        $panne->update($validated);
+        return response()->json($panne);
+    }
+
+    public function destroy(Panne $panne)
+    {
+        $panne->delete();
+        return response()->json(null, 204);
+    }
 }

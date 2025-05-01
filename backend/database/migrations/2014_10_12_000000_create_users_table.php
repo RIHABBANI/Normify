@@ -6,27 +6,19 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_info_id')->constrained('user_infos')->references('id')->onDelete('cascade')->onUpdate('restrict');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
+        Schema::create('raks', function (Blueprint $table) {
+            $table->id('ID_RAK');
+            $table->foreignId('ID_RAME')->constrained('rames', 'ID_RAME');
+            $table->string('NOM_RAK', 50);
+            $table->string('EMPLACEMENT_RAK', 50);
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('raks');
     }
 };

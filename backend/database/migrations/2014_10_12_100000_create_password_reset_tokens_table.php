@@ -6,23 +6,19 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
-        Schema::create('password_reset_tokens', function (Blueprint $table) {
-            $table->string('email')->primary();
-            $table->string('token');
-            $table->timestamp('created_at')->nullable();
+        Schema::create('cartes', function (Blueprint $table) {
+            $table->id('ID_CARTE');
+            $table->foreignId('ID_RAK')->constrained('raks', 'ID_RAK');
+            $table->string('REFERENCE_CARTE', 225);
+            $table->string('STATU_CARTE', 50);
+            $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('password_reset_tokens');
+        Schema::dropIfExists('cartes');
     }
 };

@@ -5,14 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class NormChapter extends Model
+class Utilisateur extends Model
 {
     use HasFactory;
 
-    protected $table = 'norm_chapters';
-
+    protected $primaryKey = 'ID_UTILISATEUR';
     protected $fillable = [
-        'norm_id',
-        'chapter_title',
+        'NOM_UTILISATEUR',
+        'MOT_DE_PASSE_UTILISATEUR',
+        'ROLE_UTILISATEUR'
     ];
+
+    public function interventions()
+    {
+        return $this->hasMany(Intervention::class, 'ID_UTILISATEUR');
+    }
+
+    public function maintenances()
+    {
+        return $this->hasMany(Maintenance::class, 'ID_UTILISATEUR');
+    }
 }

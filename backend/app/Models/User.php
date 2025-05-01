@@ -2,43 +2,29 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Model;
 
-class User extends Authenticatable
+class Maintenance extends Model
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    protected $primaryKey = 'ID_MAINTENANCE';
     protected $fillable = [
-        'email',
-        'password',
+        'ID_PANNE',
+        'ID_UTILISATEUR',
+        'TYPE_MAINTENANCE',
+        'DATE_MAINTENACE',
+        'TYPE_OPERATION'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    public function panne()
+    {
+        return $this->belongsTo(Panne::class, 'ID_PANNE');
+    }
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-    ];
+    public function utilisateur()
+    {
+        return $this->belongsTo(Utilisateur::class, 'ID_UTILISATEUR');
+    }
 }

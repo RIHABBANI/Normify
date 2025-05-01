@@ -5,17 +5,28 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Norm extends Model
+class Panne extends Model
 {
     use HasFactory;
 
-    protected $table = 'norms';
-
+    protected $primaryKey = 'ID_PANNE';
     protected $fillable = [
-        'norm_ref',
-        'norm_abbreviation_name',
-        'norm_complet_name',
-        'norm_version',
-        'norm_pub_date',
-    ]; 
+        'DESCRIPTION_PANNE',
+        'GRAVITE_PANNE'
+    ];
+
+    public function cartes()
+    {
+        return $this->belongsToMany(Carte::class, 'subirs', 'ID_PANNE', 'ID_CARTE');
+    }
+
+    public function interventions()
+    {
+        return $this->hasMany(Intervention::class, 'ID_PANNE');
+    }
+
+    public function maintenances()
+    {
+        return $this->hasMany(Maintenance::class, 'ID_PANNE');
+    }
 }

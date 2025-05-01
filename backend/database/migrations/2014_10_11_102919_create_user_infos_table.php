@@ -6,26 +6,19 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
-        Schema::create('user_infos', function (Blueprint $table) {
-            $table->id();
-            $table->string('first_name', 100);
-            $table->string('last_name', 100);
-            $table->string('phone', 20);
-            $table->string('matriculation', 20);
+        Schema::create('rames', function (Blueprint $table) {
+            $table->id('ID_RAME');
+            $table->string('NUMERO_RAME', 20);
+            $table->string('TYPE_RAME', 20);
+            $table->date('DATE_MISE_EN_SERVICR_RAME');
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('user_infos');
+        Schema::dropIfExists('rames');
     }
 };

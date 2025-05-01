@@ -2,47 +2,55 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\NormSubChapter;
+use App\Models\Maintenance;
+use App\Models\Panne;
+use App\Models\Utilisateur;
 use Illuminate\Http\Request;
 
-class NormSubChapterController extends Controller
+class MaintenanceController extends Controller
 {
-    public function show(){
-        $norm_sub_chapters = NormSubChapter::all();
-
-        return response()->json([
-            'success' => true,
-            'flag' => 200,
-            'message' => 'Norm Sub Chapters List',
-            'data' => $norm_sub_chapters
-        ]);
+    public function index()
+    {
+        $maintenances = Maintenance::with(['panne', 'utilisateur'])->get();
+        return response()->json($maintenances);
     }
 
-    public function showById($id){
-        $norm_sub_chapter = NormSubChapter::find($id);
-
-        return response()->json([
-            'success' => true,
-            'flaq' => 200,
-            'message' => 'This norm sub chapter retrieved successfully',
-            'data' => $norm_sub_chapter
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'ID_PANNE' => 'required|exists:pannes,ID_PANNE',
+            'ID_UTILISATEUR' => 'required|exists:utilisateurs,ID_UTILISATEUR',
+            'TYPE_MAINTENANCE' => 'required|string|max:50',
+            'DATE_MAINTENACE' => 'required|date',
+            'TYPE_OPERATION' => 'required|string|max:225'
         ]);
+
+        $maintenance = Maintenance::create($validated);
+        return response()->json($maintenance, 201);
     }
 
-    public function showByChapter(){
-        $norm_sub_chapters = NormSubChapter::join('norm_chapters', 'norm_sub_chapters.norm_chapter_id', '=', 'norm_chapters.id')
-            ->select(
-                'norm_sub_chapters.id',
-                'norm_sub_chapters.sub_chapter_title', 
-                'norm_chapters.chapter_title')
-            ->get();
-
-        return response()->json([
-            'success' => true,
-            'flag' => 200,
-            'message' => 'Norm Sub Chapters List',
-            'data' => $norm_sub_chapters
-        ]);
+    public function show(Maintenance $maintenance)
+    {
+        return response()->json($maintenance->load(['panne', 'utilisateur']));
     }
 
+    public function update(Request $request, Maintenance $maintenance)
+    {
+        $validated = $request->validate([
+            'ID_PANNE' => 'sometimes|exists:pannes,ID_PANNE',
+            'ID_UTILISATEUR' => 'sometimes|exists:utilisateurs,ID_UTILISATEUR',
+            'TYPE_MAINTENANCE' => 'sometimes|string|max:50',
+            'DATE_MAINTENACE' => 'sometimes|date',
+            'TYPE_OPERATION' => 'sometimes|string|max:225'
+        ]);
+
+        $maintenance->update($validated);
+        return response()->json($maintenance);
+    }
+
+    public function destroy(Maintenance $maintenance)
+    {
+        $maintenance->delete();
+        return response()->json(null, 204);
+    }
 }

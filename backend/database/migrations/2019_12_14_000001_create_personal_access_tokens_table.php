@@ -6,28 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
-        Schema::create('personal_access_tokens', function (Blueprint $table) {
-            $table->id();
-            $table->morphs('tokenable');
-            $table->string('name');
-            $table->string('token', 64)->unique();
-            $table->text('abilities')->nullable();
-            $table->timestamp('last_used_at')->nullable();
-            $table->timestamp('expires_at')->nullable();
+        Schema::create('subirs', function (Blueprint $table) {
+            $table->foreignId('ID_CARTE')->constrained('cartes', 'ID_CARTE');
+            $table->foreignId('ID_PANNE')->constrained('pannes', 'ID_PANNE');
+            $table->primary(['ID_CARTE', 'ID_PANNE']);
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('personal_access_tokens');
+        Schema::dropIfExists('subirs');
     }
 };

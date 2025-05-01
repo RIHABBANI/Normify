@@ -6,27 +6,19 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
-        Schema::create('norms', function (Blueprint $table) {
-            $table->id();
-            $table->bigInteger('norm_ref');
-            $table->string('norm_abbreviation_name');
-            $table->string('norm_complet_name');
-            $table->string('norm_version')->nullable();
-            $table->string('norm_pub_date')->nullable();
+        Schema::create('utilisateurs', function (Blueprint $table) {
+            $table->id('ID_UTILISATEUR');
+            $table->string('NOM_UTILISATEUR', 50);
+            $table->string('MOT_DE_PASSE_UTILISATEUR', 225);
+            $table->string('ROLE_UTILISATEUR', 225);
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('norms');
+        Schema::dropIfExists('utilisateurs');
     }
 };

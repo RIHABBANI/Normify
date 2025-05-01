@@ -6,24 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
-        Schema::create('norm_sub_chapters', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('norm_chapter_id')->constrained('norm_chapters')->references('id')->onDelete('cascade')->onUpdate('restrict');
-            $table->string('sub_chapter_title', 255);
+        Schema::create('interventions', function (Blueprint $table) {
+            $table->id('ID_INTERVENTION');
+            $table->foreignId('ID_PANNE')->constrained('pannes', 'ID_PANNE');
+            $table->foreignId('ID_UTILISATEUR')->constrained('utilisateurs', 'ID_UTILISATEUR');
+            $table->date('DATE_INTERVENTION');
+            $table->string('ACTION_EFFECTUEE_INTERVENTION', 225);
+            $table->integer('DUREE_INTERVENTION');
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('norm_sub_chapters');
+        Schema::dropIfExists('interventions');
     }
 };
