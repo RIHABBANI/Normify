@@ -9,6 +9,13 @@ use App\Http\Controllers\NormChapterController;
 use App\Http\Controllers\NormSubChapterController;
 use App\Http\Controllers\ExigencyController;
 use App\Http\Controllers\ActionController;
+use App\Http\Controllers\RakController;
+use App\Http\Controllers\UtilisateurController;
+use App\Http\Controllers\CarteController;
+use App\Http\Controllers\InterventionController;
+use App\Http\Controllers\MaintenanceController;
+use App\Http\Controllers\PanneController;
+use App\Http\Controllers\RameController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,39 +33,54 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::post('/login', [UserController::class, 'login']);
-Route::post('/logout', [UserController::class, 'logout']);
-Route::post('/register', [UserController::class, 'register']);
+Route::post('/login', [UtilisateurController::class, 'login']);
+Route::post('/logout', [UtilisateurController::class, 'logout']);
+Route::post('/register', [UtilisateurController::class, 'register']);
 
-Route::prefix('user')->group(function () {
-    Route::get('/', [UserInfoController::class, 'show']);
-    Route::get('/{id}', [UserInfoController::class, 'showById']);
+Route::prefix('utilisateurs')->group(function () {
+    Route::get('/', [UtilisateurController::class, 'index']);
+    Route::post('/', [UtilisateurController::class, 'store']);
+    Route::get('/{utilisateur}', [UtilisateurController::class, 'show']);
+    Route::put('/{utilisateur}', [UtilisateurController::class, 'update']);
+    Route::delete('/{utilisateur}', [UtilisateurController::class, 'destroy']);
 });
 
-Route::prefix('norms')->group(function () {
-    Route::get('/', [NormController::class, 'show']);
-    Route::get('/{id}', [NormController::class, 'showById']);
+Route::prefix('cartes')->group(function () {
+    Route::get('/', [CarteController::class, 'index']);
+    Route::post('/', [CarteController::class, 'store']);
+    Route::get('/{carte}', [CarteController::class, 'show']);
+    Route::put('/{carte}', [CarteController::class, 'update']);
+    Route::delete('/{carte}', [CarteController::class, 'destroy']);
 });
 
-Route::prefix('norm-chapters')->group(function () {
-    Route::get('/', [NormChapterController::class, 'show']);
-    Route::get('/{id}', [NormChapterController::class, 'showById']);
+Route::prefix('interventions')->group(function () {
+    Route::get('/', [InterventionController::class, 'index']);
+    Route::post('/', [InterventionController::class, 'store']);
+    Route::get('/{intervention}', [InterventionController::class, 'show']);
+    Route::put('/{intervention}', [InterventionController::class, 'update']);
+    Route::delete('/{intervention}', [InterventionController::class, 'destroy']);
 });
 
-Route::get('/norm-sub-chapters/chapter', [NormSubChapterController::class, 'showByChapter']);
-
-Route::prefix('norm-sub-chapters')->group(function () {
-    Route::get('/', [NormSubChapterController::class, 'show']);
-    Route::get('/{id}', [NormSubChapterController::class, 'showById']);
+Route::prefix('maintenances')->group(function () {
+    Route::get('/', [MaintenanceController::class, 'index']);
+    Route::post('/', [MaintenanceController::class, 'store']);
+    Route::get('/{maintenance}', [MaintenanceController::class, 'show']);
+    Route::put('/{maintenance}', [MaintenanceController::class, 'update']);
+    Route::delete('/{maintenance}', [MaintenanceController::class, 'destroy']);
 });
 
-Route::prefix('exigencies')->group(function () {
-    Route::get('/', [ExigencyController::class, 'show']);
-    Route::get('/{id}', [ExigencyController::class, 'showById']);
-    Route::get('/chapter/subchapter', [ExigencyController::class, 'showByChapterAndSubChapter']);
+Route::prefix('pannes')->group(function () {
+    Route::get('/', [PanneController::class, 'index']);
+    Route::post('/', [PanneController::class, 'store']);
+    Route::get('/{panne}', [PanneController::class, 'show']);
+    Route::put('/{panne}', [PanneController::class, 'update']);
+    Route::delete('/{panne}', [PanneController::class, 'destroy']);
 });
 
-Route::prefix('actions')->group(function () {
-    Route::get('/', [ActionController::class, 'show']);
-    Route::get('/{id}', [ActionController::class, 'showById']);
+Route::prefix('rames')->group(function () {
+    Route::get('/', [RameController::class, 'index']);
+    Route::post('/', [RameController::class, 'store']);
+    Route::get('/{rame}', [RameController::class, 'show']);
+    Route::put('/{rame}', [RameController::class, 'update']);
+    Route::delete('/{rame}', [RameController::class, 'destroy']);
 });
