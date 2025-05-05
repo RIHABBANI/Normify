@@ -19,7 +19,6 @@ class RakController extends Controller
         $validated = $request->validate([
             'ID_RAME' => 'required|exists:rames,ID_RAME',
             'NOM_RAK' => 'required|string|max:50',
-            'EMPLACEMENT_RAK' => 'required|string|max:50'
         ]);
 
         $rak = Rak::create($validated);

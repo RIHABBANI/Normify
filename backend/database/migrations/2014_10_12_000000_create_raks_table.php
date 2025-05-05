@@ -12,7 +12,6 @@ return new class extends Migration
             $table->id('ID_RAK');
             $table->foreignId('ID_RAME')->constrained('rames', 'ID_RAME');
             $table->string('NOM_RAK', 50);
-            $table->string('EMPLACEMENT_RAK', 50);
             $table->timestamps();
         });
     }
