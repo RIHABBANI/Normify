@@ -77,6 +77,14 @@ Route::prefix('pannes')->group(function () {
     Route::delete('/{panne}', [PanneController::class, 'destroy']);
 });
 
+Route::prefix('raks')->group(function () {
+    Route::get('/', [RakController::class, 'index']);
+    Route::post('/', [RakController::class, 'store']);
+    Route::get('/{rak}', [RakController::class, 'show']);
+    Route::put('/{rak}', [RakController::class, 'update']);
+    Route::delete('/{rak}', [RakController::class, 'destroy']);
+});
+
 Route::prefix('rames')->group(function () {
     Route::get('/', [RameController::class, 'index']);
     Route::post('/', [RameController::class, 'store']);
