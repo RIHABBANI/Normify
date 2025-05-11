@@ -9,9 +9,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('interventions', function (Blueprint $table) {
-            $table->id('ID_INTERVENTION');
-            $table->foreignId('ID_PANNE')->constrained('pannes', 'ID_PANNE');
-            $table->foreignId('ID_UTILISATEUR')->constrained('utilisateurs', 'ID_UTILISATEUR');
+            $table->id();
+            $table->foreignId('ID_PANNE')->constrained('pannes', 'id');
+            $table->foreignId('ID_UTILISATEUR')->constrained('users', 'id');
             $table->date('DATE_INTERVENTION');
             $table->string('ACTION_EFFECTUEE_INTERVENTION', 225);
             $table->integer('DUREE_INTERVENTION');

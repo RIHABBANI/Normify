@@ -9,8 +9,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('cartes', function (Blueprint $table) {
-            $table->id('ID_CARTE');
-            $table->foreignId('ID_RAK')->constrained('raks', 'ID_RAK');
+            $table->id();
+            $table->foreignId('ID_RAK')->constrained('raks', 'id');
             $table->string('REFERENCE_CARTE', 225);
             $table->string('STATU_CARTE', 50);
             $table->timestamps();

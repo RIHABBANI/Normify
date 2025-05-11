@@ -9,7 +9,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('rames', function (Blueprint $table) {
-            $table->id('ID_RAME');
+            $table->id();
             $table->string('NUMERO_RAME', 20);
             $table->string('TYPE_RAME', 20);
             $table->date('DATE_MISE_EN_SERVICR_RAME');

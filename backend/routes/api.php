@@ -2,15 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserInfoController;
+
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\NormController;
-use App\Http\Controllers\NormChapterController;
-use App\Http\Controllers\NormSubChapterController;
-use App\Http\Controllers\ExigencyController;
-use App\Http\Controllers\ActionController;
 use App\Http\Controllers\RakController;
-use App\Http\Controllers\UtilisateurController;
 use App\Http\Controllers\CarteController;
 use App\Http\Controllers\InterventionController;
 use App\Http\Controllers\MaintenanceController;
@@ -33,16 +27,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::post('/login', [UtilisateurController::class, 'login']);
-Route::post('/logout', [UtilisateurController::class, 'logout']);
-Route::post('/register', [UtilisateurController::class, 'register']);
+Route::post('/login', [UserController::class, 'login']);
+Route::post('/logout', [UserController::class, 'logout']);
 
 Route::prefix('utilisateurs')->group(function () {
-    Route::get('/', [UtilisateurController::class, 'index']);
-    Route::post('/', [UtilisateurController::class, 'store']);
-    Route::get('/{utilisateur}', [UtilisateurController::class, 'show']);
-    Route::put('/{utilisateur}', [UtilisateurController::class, 'update']);
-    Route::delete('/{utilisateur}', [UtilisateurController::class, 'destroy']);
+    Route::get('/', [UserController::class, 'index']);
+    Route::post('/', [UserController::class, 'store']);
+    Route::get('/{utilisateur}', [UserController::class, 'show']);
+    Route::put('/{utilisateur}', [UserController::class, 'update']);
+    Route::delete('/{utilisateur}', [UserController::class, 'destroy']);
 });
 
 Route::prefix('cartes')->group(function () {
