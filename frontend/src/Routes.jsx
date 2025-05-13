@@ -2,6 +2,10 @@ import React from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import Home from './components/Home';
 import Dashboard from './components/Common/Dashboard';
+
+import { RamesTable } from './components/Rames/rames-table';
+import { RaksTable } from './components/Raks/raks-tables';
+
 import { NormTable } from './components/Norms/norm-table';
 import { NormsChaptersTable } from './components/NormsChapters/chapters-table';
 import { NormsSubChaptersTable } from './components/NormsSubChapters/sub-chapters-table';
@@ -31,6 +35,8 @@ const AppRoutes = () => {
         }
       >
         <Route index path="dashboard" element={<Dashboard />} /> {/* Default route */}
+        <Route path="rames" element={<RamesTable />} /> 
+        <Route path="raks" element={<RaksTable />} /> 
         <Route path="users" element={<UsersTable />} />
         <Route path="norms" element={<NormTable />} />
         <Route path="norms-chapters" element={<NormsChaptersTable />} />

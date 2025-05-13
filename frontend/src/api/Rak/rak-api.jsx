@@ -2,9 +2,9 @@ import API from '../axios';
 import { getToken } from '../User/user-api';
 
 // Function to get all Rame data
-export const getRames = async () => {
+export const getRaks = async () => {
     try {
-        const response = await API.get('/rames');
+        const response = await API.get('/raks');
         console.log(response.data);
         return response.data;
     } catch (err) {

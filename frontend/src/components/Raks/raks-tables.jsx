@@ -1,25 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import '../../index.css';
-import { getRames } from '../../api/Rame/rame-api';
+import { getRaks } from '../../api/Rak/rak-api';
 
 
-export const RamesTable = () => {
-    const [rames, setRames] = useState([]);
+export const RaksTable = () => {
+    const [raks, setRaks] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchRames = async () => {
+        const fetchRaks = async () => {
             try {
-                const data = await getRames();
+                const data = await getRaks();
                 console.log(data);
-                setRames(data);
+                setRaks(data);
             } catch (err) {
                 console.error('Error fetching Rame data:', err.message);
             } finally {
                 setLoading(false);
             }
         };
-        fetchRames();
+        fetchRaks();
     }, []);
 
     // Show a loading indicator while fetching data
@@ -46,13 +46,12 @@ export const RamesTable = () => {
                             </div>
                         </th>
                         <th scope="col" className="px-4 py-2">id</th>
-                        <th scope="col" className="px-4 py-2">NUMERO_RAME</th>
-                        <th scope="col" className="px-4 py-2">TYPE_RAME</th>
-                        <th scope="col" className="px-4 py-2">DATE_MISE_EN_SERVICR_RAME</th>
+                        <th scope="col" className="px-4 py-2">ID Rame</th>
+                        <th scope="col" className="px-4 py-2">Nom Rak</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {rames.map((rame, index) => (
+                    {raks.map((rak, index) => (
                         <tr
                             key={index}
                             className={`${
@@ -71,10 +70,9 @@ export const RamesTable = () => {
                                     </label>
                                 </div>
                             </td>
-                            <td className="px-4 py-2">{rame.id}</td>
-                            <td className="px-4 py-2">{rame.NUMERO_RAME}</td>
-                            <td className="px-4 py-2">{rame.TYPE_RAME}</td>
-                            <td className="px-4 py-2">{rame.DATE_MISE_EN_SERVICR_RAME}</td>
+                            <td className="px-4 py-2">{rak.id}</td>
+                            <td className="px-4 py-2">{rak.ID_RAME}</td>
+                            <td className="px-4 py-2">{rak.NOM_RAK}</td>
                         </tr>
                     ))}
                 </tbody>
@@ -82,4 +80,4 @@ export const RamesTable = () => {
         </div>
     );
 }
-export default RamesTable;
+export default RaksTable;

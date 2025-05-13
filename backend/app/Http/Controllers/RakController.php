@@ -10,14 +10,14 @@ class RakController extends Controller
 {
     public function index()
     {
-        $raks = Rak::with('rame')->get();
+        $raks = Rak::all();
         return response()->json($raks);
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'ID_RAME' => 'required|exists:rames,ID_RAME',
+            'ID_RAME' => 'required|exists:rames,id',
             'NOM_RAK' => 'required|string|max:50',
         ]);
 
