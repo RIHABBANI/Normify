@@ -17,7 +17,7 @@ class CarteController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'ID_RAK' => 'required|exists:raks,ID_RAK',
+            'ID_RAK' => 'required|exists:raks,id',
             'REFERENCE_CARTE' => 'required|string|max:225',
             'STATU_CARTE' => 'required|string|max:50'
         ]);

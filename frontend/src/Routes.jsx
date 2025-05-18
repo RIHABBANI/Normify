@@ -5,6 +5,8 @@ import Dashboard from './components/Common/Dashboard';
 
 import { RamesTable } from './components/Rames/rames-table';
 import { RaksTable } from './components/Raks/raks-tables';
+import { CartesTable } from './components/Cartes/cartes-table';
+
 
 import { NormTable } from './components/Norms/norm-table';
 import { NormsChaptersTable } from './components/NormsChapters/chapters-table';
@@ -37,6 +39,7 @@ const AppRoutes = () => {
         <Route index path="dashboard" element={<Dashboard />} /> {/* Default route */}
         <Route path="rames" element={<RamesTable />} /> 
         <Route path="raks" element={<RaksTable />} /> 
+        <Route path="cartes" element={<CartesTable />} /> 
         <Route path="users" element={<UsersTable />} />
         <Route path="norms" element={<NormTable />} />
         <Route path="norms-chapters" element={<NormsChaptersTable />} />
