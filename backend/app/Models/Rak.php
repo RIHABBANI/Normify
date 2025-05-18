@@ -9,7 +9,7 @@ class Rak extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'ID_RAK';
+    protected $primaryKey = 'id';
     protected $fillable = [
         'ID_RAME',
         'NOM_RAK',

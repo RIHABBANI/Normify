@@ -34,7 +34,7 @@ class CarteController extends Controller
     public function update(Request $request, Carte $carte)
     {
         $validated = $request->validate([
-            'ID_RAK' => 'sometimes|exists:raks,ID_RAK',
+            'ID_RAK' => 'sometimes|exists:raks,id',
             'REFERENCE_CARTE' => 'sometimes|string|max:225',
             'STATU_CARTE' => 'sometimes|string|max:50'
         ]);

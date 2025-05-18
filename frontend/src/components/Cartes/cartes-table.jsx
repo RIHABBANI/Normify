@@ -46,6 +46,7 @@ export const CartesTable = () => {
                             </div>
                         </th>
                         <th scope="col" className="px-4 py-2">id</th>
+                        <th scope="col" className="px-4 py-2">ID RAK</th>
                         <th scope="col" className="px-4 py-2">REFERENCE_CARTE</th>
                         <th scope="col" className="px-4 py-2">STATU_CARTE</th>
                     </tr>
@@ -71,6 +72,7 @@ export const CartesTable = () => {
                                 </div>
                             </td>
                             <td className="px-4 py-2">{carte.id}</td>
+                            <td className="px-4 py-2">{carte.ID_RAK}</td>
                             <td className="px-4 py-2">{carte.REFERENCE_CARTE}</td>
                             <td className="px-4 py-2">{carte.STATU_CARTE}</td>
                         </tr>
