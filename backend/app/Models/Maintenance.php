@@ -9,7 +9,7 @@ class Maintenance extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'ID_MAINTENANCE';
+    protected $primaryKey = 'id';
     protected $fillable = [
         'ID_PANNE',
         'ID_UTILISATEUR',

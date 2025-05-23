@@ -9,7 +9,7 @@ class Rame extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'ID_RAME';
+    protected $primaryKey = 'id';
     protected $fillable = [
         'NUMERO_RAME',
         'TYPE_RAME',

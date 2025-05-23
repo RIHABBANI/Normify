@@ -13,7 +13,6 @@ class CarteController extends Controller
         $cartes = Carte::with('rak')->get();
         return response()->json($cartes);
     }
-
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -29,6 +28,12 @@ class CarteController extends Controller
     public function show(Carte $carte)
     {
         return response()->json($carte->load('rak', 'pannes'));
+    }
+
+    public function showByRak(Rak $rak)
+    {
+        $cartes = Carte::where('ID_RAK', $rak->id)->get();
+        return response()->json($cartes);
     }
 
     public function update(Request $request, Carte $carte)

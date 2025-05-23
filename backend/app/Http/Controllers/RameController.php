@@ -30,6 +30,7 @@ class RameController extends Controller
         return response()->json($rame);
     }
 
+
     public function update(Request $request, Rame $rame)
     {
         $validated = $request->validate([

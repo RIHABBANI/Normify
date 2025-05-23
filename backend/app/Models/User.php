@@ -14,10 +14,13 @@ class User extends Authenticatable
     protected $table = 'users';
 
     protected $fillable = [
-        'NOM_UTILISATEUR',
+        'first_name',
+        'last_name',
+        'matricule',
+        'phone',
         'email',
         'password',
-        'ROLE_UTILISATEUR',
+        'role',
     ];
 
     public function interventions()

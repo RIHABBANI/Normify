@@ -30,12 +30,17 @@ class RakController extends Controller
         return response()->json($rak->load('rame'));
     }
 
+    public function showByRame(Rame $rame)
+    {
+        $raks = Rak::where('ID_RAME', $rame->id)->get();
+        return response()->json($raks);
+    }
+
     public function update(Request $request, Rak $rak)
     {
         $validated = $request->validate([
-            'ID_RAME' => 'sometimes|exists:rames,ID_RAME',
-            'NOM_RAK' => 'sometimes|string|max:50',
-            'EMPLACEMENT_RAK' => 'sometimes|string|max:50'
+            'ID_RAME' => 'sometimes|exists:rames,id',
+            'NOM_RAK' => 'sometimes|string|max:50'
         ]);
 
         $rak->update($validated);

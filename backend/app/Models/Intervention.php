@@ -9,7 +9,7 @@ class Intervention extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'ID_INTERVENTION';
+    protected $primaryKey = 'id';
     protected $fillable = [
         'ID_PANNE',
         'ID_UTILISATEUR',

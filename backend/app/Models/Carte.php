@@ -9,7 +9,7 @@ class Carte extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'ID_CARTE';
+    protected $primaryKey = 'id';
     protected $fillable = [
         'ID_RAK',
         'REFERENCE_CARTE',

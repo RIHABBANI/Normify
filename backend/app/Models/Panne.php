@@ -9,7 +9,7 @@ class Panne extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'ID_PANNE';
+    protected $primaryKey = 'id';
     protected $fillable = [
         'DESCRIPTION_PANNE',
         'GRAVITE_PANNE'
