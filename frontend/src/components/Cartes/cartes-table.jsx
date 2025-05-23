@@ -2,10 +2,13 @@ import React, { useEffect, useState } from 'react';
 import '../../index.css';
 import { getCartes } from '../../api/Carte/carte-api';
 
-
 export const CartesTable = () => {
     const [cartes, setCartes] = useState([]);
+    const [filteredCartes, setFilteredCartes] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [statusFilter, setStatusFilter] = useState('all');
+    const [viewMode, setViewMode] = useState('table'); // 'table' or 'cards'
 
     useEffect(() => {
         const fetchCartes = async () => {
@@ -13,8 +16,9 @@ export const CartesTable = () => {
                 const data = await getCartes();
                 console.log(data);
                 setCartes(data);
+                setFilteredCartes(data);
             } catch (err) {
-                console.error('Error fetching Rame data:', err.message);
+                console.error('Erreur lors de la récupération des données de carte:', err.message);
             } finally {
                 setLoading(false);
             }
@@ -22,64 +26,269 @@ export const CartesTable = () => {
         fetchCartes();
     }, []);
 
+    useEffect(() => {
+        // Filter cartes based on search term and status filter
+        let results = cartes;
+        
+        if (searchTerm) {
+            results = results.filter(carte => 
+                carte.REFERENCE_CARTE.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+        }
+        
+        if (statusFilter !== 'all') {
+            results = results.filter(carte => carte.STATU_CARTE === statusFilter);
+        }
+        
+        setFilteredCartes(results);
+    }, [searchTerm, statusFilter, cartes]);
+
     // Show a loading indicator while fetching data
     if (loading) {
-        return <div>Loading...</div>;
+        return (
+            <div className="bg-white rounded-xl shadow-md p-6 flex justify-center items-center h-64">
+                <div className="flex flex-col items-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-blue-600"></div>
+                    <p className="mt-4 text-gray-600">Chargement des cartes...</p>
+                </div>
+            </div>
+        );
     }
+
+    const getStatusClass = (status) => {
+        switch(status) {
+            case 'Fonctionnel':
+                return 'bg-green-100 text-green-800';
+            case 'En panne':
+                return 'bg-red-100 text-red-800';
+            case 'En maintenance':
+                return 'bg-yellow-100 text-yellow-800';
+            default:
+                return 'bg-gray-100 text-gray-800';
+        }
+    };
 
     // Render the table
     return (
-        <div className="relative overflow-x-auto shadow-lg sm:rounded-lg border border-gray-300">
-            <table className="w-full text-xs text-left text-gray-900 bg-white">
-                <thead className="text-xs uppercase text-gray bg-white-700">
-                    <tr>
-                        <th scope="col" className="p-3 border-gray-300">
-                            <div className="flex items-center">
-                                <input
-                                    id="checkbox-all-search"
-                                    type="checkbox"
-                                    className="w-4 h-4 text-blue-500 bg-gray-200 rounded focus:ring-2 focus:ring-blue-400"
-                                />
-                                <label htmlFor="checkbox-all-search" className="sr-only">
-                                    checkbox
-                                </label>
-                            </div>
-                        </th>
-                        <th scope="col" className="px-4 py-2">id</th>
-                        <th scope="col" className="px-4 py-2">ID RAK</th>
-                        <th scope="col" className="px-4 py-2">REFERENCE_CARTE</th>
-                        <th scope="col" className="px-4 py-2">STATU_CARTE</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {cartes.map((carte, index) => (
-                        <tr
-                            key={index}
-                            className={`${
-                                index % 2 === 0 ? "bg-gray-100" : "bg-white"
-                            } border-b border-gray-300 hover:bg-gray-200`}
+        <div className="bg-white p-6 rounded-xl shadow-md">
+            <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold text-gray-800">Gestion des Cartes</h2>
+                <div className="flex space-x-2">
+                    <button className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                        </svg>
+                        Ajouter une carte
+                    </button>
+                    <div className="flex bg-gray-200 rounded-md p-1">
+                        <button
+                            className={`px-3 py-1 rounded-md ${viewMode === 'table' ? 'bg-white shadow-sm' : ''}`}
+                            onClick={() => setViewMode('table')}
+                            aria-label="Vue tableau"
+                            title="Vue tableau"
                         >
-                            <td className="w-4 p-4">
-                                <div className="flex items-center">
-                                    <input
-                                        id="checkbox-all-search"
-                                        type="checkbox"
-                                        className="w-4 h-4 text-blue-500 bg-gray-200 rounded focus:ring-2 focus:ring-blue-400"
-                                    />
-                                    <label htmlFor="checkbox-all-search" className="sr-only">
-                                        checkbox
-                                    </label>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                            </svg>
+                        </button>
+                        <button
+                            className={`px-3 py-1 rounded-md ${viewMode === 'cards' ? 'bg-white shadow-sm' : ''}`}
+                            onClick={() => setViewMode('cards')}
+                            aria-label="Vue carte"
+                            title="Vue carte"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            {/* Search and filter */}
+            <div className="flex flex-col md:flex-row gap-4 mb-6">
+                <div className="relative flex-grow">
+                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <svg className="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                        </svg>
+                    </div>
+                    <input 
+                        type="text" 
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5" 
+                        placeholder="Rechercher des cartes" 
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                </div>
+                <select 
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
+                    value={statusFilter}
+                    onChange={(e) => setStatusFilter(e.target.value)}
+                >
+                    <option value="all">Tous les statuts</option>
+                    <option value="Fonctionnel">Fonctionnel</option>
+                    <option value="En panne">En panne</option>
+                    <option value="En maintenance">En maintenance</option>
+                </select>
+            </div>
+
+            {filteredCartes.length === 0 ? (
+                <div className="bg-yellow-50 p-6 rounded-lg shadow-md border border-yellow-200">
+                    <h3 className="text-xl font-semibold text-yellow-700 mb-2">Aucune carte trouvée</h3>
+                    <p className="text-yellow-600">Essayez d'ajuster vos critères de recherche ou de filtre.</p>
+                </div>
+            ) : viewMode === 'table' ? (
+                <div className="relative overflow-x-auto rounded-lg border border-gray-200">
+                    <table className="w-full text-sm text-left text-gray-900 bg-white">
+                        <thead className="text-xs uppercase bg-gray-100 border-b border-gray-200">
+                            <tr>
+                                <th scope="col" className="p-3">
+                                    <div className="flex items-center">
+                                        <input
+                                            id="checkbox-all-search"
+                                            type="checkbox"
+                                            className="w-4 h-4 text-blue-500 bg-white rounded focus:ring-2 focus:ring-blue-400"
+                                        />
+                                        <label htmlFor="checkbox-all-search" className="sr-only">
+                                            checkbox
+                                        </label>
+                                    </div>
+                                </th>
+                                <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">ID</th>
+                                <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Rack ID</th>
+                                <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Référence</th>
+                                <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Statut</th>
+                                <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {filteredCartes.map((carte, index) => (
+                                <tr
+                                    key={carte.id || index}
+                                    className={`${
+                                        index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                                    } border-b border-gray-200 hover:bg-blue-50 transition-all duration-150`}
+                                >
+                                    <td className="w-4 p-4">
+                                        <div className="flex items-center">
+                                            <input
+                                                id={`checkbox-${carte.id}`}
+                                                type="checkbox"
+                                                className="w-4 h-4 text-blue-500 bg-gray-200 rounded focus:ring-2 focus:ring-blue-400"
+                                            />
+                                            <label htmlFor={`checkbox-${carte.id}`} className="sr-only">
+                                                checkbox
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-3 font-medium">{carte.id}</td>
+                                    <td className="px-6 py-3">{carte.ID_RAK}</td>
+                                    <td className="px-6 py-3">{carte.REFERENCE_CARTE}</td>
+                                    <td className="px-6 py-3">
+                                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusClass(carte.STATU_CARTE)}`}>
+                                            {carte.STATU_CARTE}
+                                        </span>
+                                    </td>
+                                    <td className="px-6 py-3">
+                                        <div className="flex space-x-3">
+                                            <button 
+                                                className="text-blue-600 hover:text-blue-800"
+                                                title="Détails"
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                </svg>
+                                            </button>
+                                            <button 
+                                                className="text-blue-600 hover:text-blue-800"
+                                                title="Modifier"
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                                </svg>
+                                            </button>
+                                            <button 
+                                                className="text-red-600 hover:text-red-800"
+                                                title="Supprimer"
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    {filteredCartes.map((carte, index) => (
+                        <div 
+                            key={carte.id || index}
+                            className="bg-white rounded-lg border border-gray-200 shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden"
+                        >
+                            <div className={`h-2 ${carte.STATU_CARTE === 'Fonctionnel' ? 'bg-green-500' : carte.STATU_CARTE === 'En panne' ? 'bg-red-500' : 'bg-yellow-500'}`}></div>
+                            <div className="p-5">
+                                <div className="flex items-center justify-between mb-4">
+                                    <h3 className="text-lg font-bold text-gray-800 truncate" title={carte.REFERENCE_CARTE}>
+                                        {carte.REFERENCE_CARTE}
+                                    </h3>
+                                    <span className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${getStatusClass(carte.STATU_CARTE)}`}>
+                                        {carte.STATU_CARTE}
+                                    </span>
                                 </div>
-                            </td>
-                            <td className="px-4 py-2">{carte.id}</td>
-                            <td className="px-4 py-2">{carte.ID_RAK}</td>
-                            <td className="px-4 py-2">{carte.REFERENCE_CARTE}</td>
-                            <td className="px-4 py-2">{carte.STATU_CARTE}</td>
-                        </tr>
+                                <div className="mb-4 text-sm text-gray-600">
+                                    <p><span className="font-semibold">ID:</span> {carte.id}</p>
+                                    <p><span className="font-semibold">Rack ID:</span> {carte.ID_RAK}</p>
+                                </div>
+                                <div className="flex justify-between mt-4 space-x-2">
+                                    <button className="flex-1 px-3 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                                        Détails
+                                    </button>
+                                    <button className="flex-1 px-3 py-2 text-sm bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
+                                        Modifier
+                                    </button>
+                                    <button className="px-3 py-2 text-sm bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors">
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     ))}
-                </tbody>
-            </table>
+                </div>
+            )}
+            
+            <div className="mt-5 flex justify-between items-center">
+                <div className="text-sm text-gray-700">
+                    Affichage de <span className="font-medium">{filteredCartes.length}</span> cartes sur <span className="font-medium">{cartes.length}</span> au total
+                </div>
+                
+                <div className="flex space-x-2">
+                    <button className="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                        Précédent
+                    </button>
+                    <button className="px-3 py-1 border border-blue-500 rounded-md text-sm font-medium text-white bg-blue-500 hover:bg-blue-600">
+                        1
+                    </button>
+                    <button className="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                        2
+                    </button>
+                    <button className="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                        3
+                    </button>
+                    <button className="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                        Suivant
+                    </button>
+                </div>
+            </div>
         </div>
     );
-}
+};
+
 export default CartesTable;

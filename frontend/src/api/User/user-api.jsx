@@ -23,59 +23,38 @@ export const login = async (email, password) => {
         if (err.response) {
             throw new Error(err.response.data.message);
         } else {
-            throw new Error('Network error. Please try again.');
+            throw new Error('Erreur de réseau. Veuillez réessayer.');
         }
     }
 }
 
 // Logout function that removes the token from localStorage
-export const Logout = async() => {
+export const logout = async() => {
     try {
         await API.post('/logout');
         localStorage.removeItem('token');
+        localStorage.removeItem('authData');
     }
     catch (err) {
         if (err.response) {
             throw new Error(err.response.data.message);
         } else {
-            throw new Error('Network error. Please try again.');
+            throw new Error('Erreur de réseau. Veuillez réessayer.');
         }
     }
 }
 
-// Register function that sends a POST request to the API
-export const register = async (formData) => {
-    const firstName = formData.firstName;
-    const lastName = formData.lastName;
-    const phone = formData.phone;
-    const matriculation = formData.matriculation;
-    const email = formData.email;
-    const password = formData.password;
-
+// Get all users function that sends a GET request to the API
+export const getAllUsers = async () => {
     try {
-        const response = await API.post('/register', { firstName, lastName, phone, matriculation, email, password });
+        const response = await API.get('/utilisateurs');
         return response.data;
     }
     catch (err) {
         if (err.response) {
             throw new Error(err.response.data.message);
         } else {
-            throw new Error('Network error. Please try again.');
-        }
-    }
-}
-
-// Get user function that sends a GET request to the API
-export const getUser = async () => {
-    try {
-        const response = await API.get('/user');
-        return response.data.data;
-    }
-    catch (err) {
-        if (err.response) {
-            throw new Error(err.response.data.message);
-        } else {
-            throw new Error('Network error. Please try again.');
+            throw new Error('Erreur de réseau. Veuillez réessayer.');
         }
     }
 }
@@ -83,14 +62,59 @@ export const getUser = async () => {
 // Get user by id function that sends a GET request to the API
 export const getUserById = async (id) => {
     try {
-        const response = await API.get(`/user/${id}`);
+        const response = await API.get(`/utilisateurs/${id}`);
         return response.data;
     }
     catch (err) {
         if (err.response) {
             throw new Error(err.response.data.message);
         } else {
-            throw new Error('Network error. Please try again.');
+            throw new Error('Erreur de réseau. Veuillez réessayer.');
+        }
+    }
+}
+
+// Add a new user
+export const createUser = async (userData) => {
+    try {
+        const response = await API.post('/utilisateurs', userData);
+        return response.data;
+    }
+    catch (err) {
+        if (err.response) {
+            throw new Error(err.response.data.message);
+        } else {
+            throw new Error('Erreur de réseau. Veuillez réessayer.');
+        }
+    }
+}
+
+// Update an existing user
+export const updateUser = async (id, userData) => {
+    try {
+        const response = await API.put(`/utilisateurs/${id}`, userData);
+        return response.data;
+    }
+    catch (err) {
+        if (err.response) {
+            throw new Error(err.response.data.message);
+        } else {
+            throw new Error('Erreur de réseau. Veuillez réessayer.');
+        }
+    }
+}
+
+// Delete a user
+export const deleteUser = async (id) => {
+    try {
+        const response = await API.delete(`/utilisateurs/${id}`);
+        return response.data;
+    }
+    catch (err) {
+        if (err.response) {
+            throw new Error(err.response.data.message);
+        } else {
+            throw new Error('Erreur de réseau. Veuillez réessayer.');
         }
     }
 }
