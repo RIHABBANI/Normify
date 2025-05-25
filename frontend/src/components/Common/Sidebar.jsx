@@ -45,6 +45,18 @@ const Sidebar = () => {
                         </li>
                         <li>
                             <Link 
+                                to="/racks" 
+                                className="flex items-center p-2 text-gray-800 rounded-lg hover:bg-gray-200 group"
+                            >
+                                <svg className="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-800 size-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" >
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6a7.5 7.5 0 1 0 7.5 7.5h-7.5V6Z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0 0 13.5 3v7.5Z" />
+                                </svg>
+                                <span className="ms-3 text-sm">Racks</span>
+                            </Link>  
+                        </li>
+                        <li>
+                            <Link 
                                 to="/cartes" 
                                 className="flex items-center p-2 text-gray-800 rounded-lg hover:bg-gray-200 group"
                             >

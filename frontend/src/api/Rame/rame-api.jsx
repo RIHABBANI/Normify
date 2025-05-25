@@ -71,3 +71,17 @@ export const deleteRame = async (rameId) => {
         }
     }
 };
+
+// Function to get replacement card history for a rame
+export const getRameReplacementHistory = async (rameId) => {
+    try {
+        const response = await API.get(`/rames/${rameId}/replacements`);
+        return response.data;
+    } catch (err) {
+        if (err.response) {
+            throw new Error(err.response.data.message);
+        } else {
+            throw new Error('Network error. Please try again.');
+        }
+    }
+};

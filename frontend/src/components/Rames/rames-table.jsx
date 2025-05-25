@@ -12,11 +12,12 @@ export const RamesTable = () => {
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [error, setError] = useState('');
-    const [success, setSuccess] = useState('');
-    const [formData, setFormData] = useState({
+    const [success, setSuccess] = useState('');    const [formData, setFormData] = useState({
         NUMERO_RAME: '',
         TYPE_RAME: '',
-        DATE_MISE_EN_SERVICR_RAME: ''
+        PARTIE_RAME: '',
+        DERNIERE_MAINTENANCE: '',
+        PROCHAINE_MAINTENANCE: ''
     });
     
     const navigate = useNavigate();
@@ -46,26 +47,24 @@ export const RamesTable = () => {
             ...formData,
             [name]: value
         });
-    };
-
-    const handleRameClick = (rame) => {
+    };    const handleRameClick = (rame) => {
         setSelectedRame(rame.id);
-        // Navigate to raks with the rame id
-        navigate(`/raks/${rame.id}`);
+        // Navigate to rame details page
+        navigate(`/rames/${rame.id}`);
     };
 
     const openAddModal = () => {
         resetForm();
         setShowAddModal(true);
-    };
-
-    const openEditModal = (rame, e) => {
+    };    const openEditModal = (rame, e) => {
         e.stopPropagation(); // Prevent navigation when clicking edit button
         setSelectedRame(rame);
         setFormData({
             NUMERO_RAME: rame.NUMERO_RAME || '',
             TYPE_RAME: rame.TYPE_RAME || '',
-            DATE_MISE_EN_SERVICR_RAME: rame.DATE_MISE_EN_SERVICR_RAME || ''
+            PARTIE_RAME: rame.PARTIE_RAME || '',
+            DERNIERE_MAINTENANCE: rame.DERNIERE_MAINTENANCE || '',
+            PROCHAINE_MAINTENANCE: rame.PROCHAINE_MAINTENANCE || ''
         });
         setShowEditModal(true);
     };
@@ -74,13 +73,13 @@ export const RamesTable = () => {
         e.stopPropagation(); // Prevent navigation when clicking delete button
         setSelectedRame(rame);
         setShowDeleteModal(true);
-    };
-
-    const resetForm = () => {
+    };    const resetForm = () => {
         setFormData({
             NUMERO_RAME: '',
             TYPE_RAME: '',
-            DATE_MISE_EN_SERVICR_RAME: ''
+            PARTIE_RAME: '',
+            DERNIERE_MAINTENANCE: '',
+            PROCHAINE_MAINTENANCE: ''
         });
         setError('');
         setSuccess('');
@@ -173,13 +172,13 @@ export const RamesTable = () => {
             )}
 
             <div className="relative overflow-x-auto rounded-lg border border-gray-200">
-                <table className="w-full text-sm text-left text-gray-900 bg-white">
-                    <thead className="text-xs uppercase bg-gray-100 border-b border-gray-200">
+                <table className="w-full text-sm text-left text-gray-900 bg-white">                    <thead className="text-xs uppercase bg-gray-100 border-b border-gray-200">
                         <tr>
                             <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">ID</th>
                             <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Numéro Rame</th>
                             <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Type Rame</th>
-                            <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Date Mise En Service</th>
+                            <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Partie</th>
+                            <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Dernière Maintenance</th>
                             <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Actions</th>
                         </tr>
                     </thead>
@@ -193,11 +192,18 @@ export const RamesTable = () => {
                                 } border-b border-gray-200 hover:bg-blue-50 cursor-pointer transition-all duration-150 ${
                                     selectedRame === rame.id ? "bg-blue-50" : ""
                                 }`}
-                            >
-                                <td className="px-6 py-3 font-medium">{rame.id}</td>
+                            >                                <td className="px-6 py-3 font-medium">{rame.id}</td>
                                 <td className="px-6 py-3">{rame.NUMERO_RAME}</td>
                                 <td className="px-6 py-3">{rame.TYPE_RAME}</td>
-                                <td className="px-6 py-3">{rame.DATE_MISE_EN_SERVICR_RAME}</td>
+                                <td className="px-6 py-3">{rame.PARTIE_RAME || 'Non spécifié'}</td>
+                                <td className="px-6 py-3">
+                                    {rame.DERNIERE_MAINTENANCE ? new Date(rame.DERNIERE_MAINTENANCE).toLocaleDateString('fr-FR') : 'Non spécifié'} 
+                                    {rame.PROCHAINE_MAINTENANCE && 
+                                        <span className="ml-2 text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full">
+                                            Prochaine: {new Date(rame.PROCHAINE_MAINTENANCE).toLocaleDateString('fr-FR')}
+                                        </span>
+                                    }
+                                </td>
                                 <td className="px-6 py-3">
                                     <div className="flex space-x-3">
                                         <button 
@@ -224,9 +230,8 @@ export const RamesTable = () => {
                         ))}
                     </tbody>
                 </table>
-            </div>
-            <div className="mt-4 text-sm text-gray-500">
-                Cliquez sur une rame pour voir ses détails de raks
+            </div>            <div className="mt-4 text-sm text-gray-500">
+                Cliquez sur une rame pour voir les détails et l'historique des remplacements de cartes
             </div>
 
             {/* Add Rame Modal */}
@@ -243,8 +248,7 @@ export const RamesTable = () => {
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"></path>
                                 </svg>
                             </button>
-                        </div>
-                        <form onSubmit={handleAddRame} className="space-y-4">
+                        </div>                        <form onSubmit={handleAddRame} className="space-y-4">
                             <div>
                                 <label className="block text-gray-700 text-sm font-bold mb-2">Numéro de Rame</label>
                                 <input
@@ -268,14 +272,34 @@ export const RamesTable = () => {
                                 />
                             </div>
                             <div>
-                                <label className="block text-gray-700 text-sm font-bold mb-2">Date de Mise en Service</label>
+                                <label className="block text-gray-700 text-sm font-bold mb-2">Partie de Rame</label>
                                 <input
-                                    type="date"
-                                    name="DATE_MISE_EN_SERVICR_RAME"
-                                    value={formData.DATE_MISE_EN_SERVICR_RAME}
+                                    type="text"
+                                    name="PARTIE_RAME"
+                                    value={formData.PARTIE_RAME}
                                     onChange={handleInputChange}
                                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                     required
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-gray-700 text-sm font-bold mb-2">Dernière Maintenance</label>
+                                <input
+                                    type="date"
+                                    name="DERNIERE_MAINTENANCE"
+                                    value={formData.DERNIERE_MAINTENANCE}
+                                    onChange={handleInputChange}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-gray-700 text-sm font-bold mb-2">Prochaine Maintenance</label>
+                                <input
+                                    type="date"
+                                    name="PROCHAINE_MAINTENANCE"
+                                    value={formData.PROCHAINE_MAINTENANCE}
+                                    onChange={handleInputChange}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                 />
                             </div>
 
@@ -313,8 +337,7 @@ export const RamesTable = () => {
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"></path>
                                 </svg>
                             </button>
-                        </div>
-                        <form onSubmit={handleEditRame} className="space-y-4">
+                        </div>                        <form onSubmit={handleEditRame} className="space-y-4">
                             <div>
                                 <label className="block text-gray-700 text-sm font-bold mb-2">Numéro de Rame</label>
                                 <input
@@ -338,14 +361,34 @@ export const RamesTable = () => {
                                 />
                             </div>
                             <div>
-                                <label className="block text-gray-700 text-sm font-bold mb-2">Date de Mise en Service</label>
+                                <label className="block text-gray-700 text-sm font-bold mb-2">Partie de Rame</label>
                                 <input
-                                    type="date"
-                                    name="DATE_MISE_EN_SERVICR_RAME"
-                                    value={formData.DATE_MISE_EN_SERVICR_RAME}
+                                    type="text"
+                                    name="PARTIE_RAME"
+                                    value={formData.PARTIE_RAME}
                                     onChange={handleInputChange}
                                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                     required
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-gray-700 text-sm font-bold mb-2">Dernière Maintenance</label>
+                                <input
+                                    type="date"
+                                    name="DERNIERE_MAINTENANCE"
+                                    value={formData.DERNIERE_MAINTENANCE}
+                                    onChange={handleInputChange}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-gray-700 text-sm font-bold mb-2">Prochaine Maintenance</label>
+                                <input
+                                    type="date"
+                                    name="PROCHAINE_MAINTENANCE"
+                                    value={formData.PROCHAINE_MAINTENANCE}
+                                    onChange={handleInputChange}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                 />
                             </div>
 

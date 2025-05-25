@@ -104,12 +104,12 @@ export const CartesByRak = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {cartes.map((carte, index) => (
-                                <tr
+                            {cartes.map((carte, index) => (                                <tr
                                     key={carte.id || index}
                                     className={`${
                                         index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                                    } border-b border-gray-200 hover:bg-blue-50 transition-all duration-150`}
+                                    } border-b border-gray-200 hover:bg-blue-50 transition-all duration-150 cursor-pointer`}
+                                    onClick={() => navigate(`/cartes/${carte.id}`)}
                                 >
                                     <td className="w-4 p-4">
                                         <div className="flex items-center">
@@ -137,10 +137,13 @@ export const CartesByRak = () => {
                                         </span>
                                     </td>
                                     <td className="px-6 py-3">
-                                        <div className="flex space-x-3">
-                                            <button 
+                                        <div className="flex space-x-3">                                            <button 
                                                 className="text-blue-600 hover:text-blue-800"
                                                 title="Détails"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    navigate(`/cartes/${carte.id}`);
+                                                }}
                                             >
                                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
