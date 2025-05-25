@@ -10,6 +10,7 @@ use App\Http\Controllers\InterventionController;
 use App\Http\Controllers\MaintenanceController;
 use App\Http\Controllers\PanneController;
 use App\Http\Controllers\RameController;
+use App\Http\Controllers\RemplacementCarteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +42,7 @@ Route::prefix('utilisateurs')->group(function () {
 Route::prefix('cartes')->group(function () {
     Route::get('/', [CarteController::class, 'index']);
     Route::get('/raks/{rak}', [CarteController::class, 'showByRak']);
+    Route::get('/rame/{rameId}', [CarteController::class, 'showByRame']);
     Route::post('/', [CarteController::class, 'store']);
     Route::get('/{carte}', [CarteController::class, 'show']);
     Route::put('/{carte}', [CarteController::class, 'update']);
@@ -86,4 +88,14 @@ Route::prefix('rames')->group(function () {
     Route::get('/{rame}', [RameController::class, 'show']);
     Route::put('/{rame}', [RameController::class, 'update']);
     Route::delete('/{rame}', [RameController::class, 'destroy']);
+});
+
+Route::prefix('remplacement-cartes')->group(function () {
+    Route::get('/', [RemplacementCarteController::class, 'index']);
+    Route::post('/', [RemplacementCarteController::class, 'store']);
+    Route::get('/rame/{rame}', [RemplacementCarteController::class, 'getRemplacementsByRame']);
+    Route::get('/carte/{carte}', [RemplacementCarteController::class, 'getRemplacementsByCarte']);
+    Route::get('/{remplacementCarte}', [RemplacementCarteController::class, 'show']);
+    Route::put('/{remplacementCarte}', [RemplacementCarteController::class, 'update']);
+    Route::delete('/{remplacementCarte}', [RemplacementCarteController::class, 'destroy']);
 });

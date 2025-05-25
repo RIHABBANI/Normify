@@ -12,7 +12,9 @@ return new class extends Migration
             $table->id();
             $table->string('NUMERO_RAME', 20);
             $table->string('TYPE_RAME', 20);
-            $table->date('DATE_MISE_EN_SERVICR_RAME');
+            $table->string('PARTIE_RAME', 50);
+            $table->date('DERNIERE_MAINTENANCE')->nullable();
+            $table->date('PROCHAINE_MAINTENANCE')->nullable();
             $table->timestamps();
         });
     }

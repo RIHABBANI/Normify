@@ -10,10 +10,13 @@ class Rame extends Model
     use HasFactory;
 
     protected $primaryKey = 'id';
+
     protected $fillable = [
         'NUMERO_RAME',
         'TYPE_RAME',
-        'DATE_MISE_EN_SERVICR_RAME'
+        'DERNIERE_MAINTENANCE',
+        'PROCHAINE_MAINTENANCE',
+        'PARTIE_RAME',
     ];
 
     public function raks()

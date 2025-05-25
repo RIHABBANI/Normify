@@ -35,6 +35,22 @@ class CarteController extends Controller
         $cartes = Carte::where('ID_RAK', $rak->id)->get();
         return response()->json($cartes);
     }
+    
+    public function showByRame($rameId)
+    {
+        // Get all RAKs belonging to the specified RAME
+        $raks = Rak::where('ID_RAME', $rameId)->pluck('id');
+        
+        // Get all cartes belonging to these RAKs
+        $cartes = Carte::whereIn('ID_RAK', $raks)->with('rak')->get();
+        
+        return response()->json($cartes);
+    }
+
+    public function showHistory()
+    {
+        
+    }
 
     public function update(Request $request, Carte $carte)
     {
