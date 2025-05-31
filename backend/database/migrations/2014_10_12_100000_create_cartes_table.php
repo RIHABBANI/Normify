@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('ID_RAK')->constrained('raks', 'id');
             $table->string('REFERENCE_CARTE', 225);
-            $table->string('STATU_CARTE', 50);
+            $table->enum('STATU_CARTE', ['fonctionnel', 'en panne', 'en maintenance', 'hors service']);
             $table->timestamps();
         });
     }

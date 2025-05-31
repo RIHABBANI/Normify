@@ -18,7 +18,6 @@ class RameController extends Controller
         $validated = $request->validate([
             'NUMERO_RAME' => 'required|string|max:20',
             'TYPE_RAME' => 'required|string|max:20',
-            'PARTIE_RAME' => 'required|string|max:50',
             'DERNIERE_MAINTENANCE' => 'nullable|date',
             'PROCHAINE_MAINTENANCE' => 'nullable|date'
         ]);
@@ -37,7 +36,6 @@ class RameController extends Controller
         $validated = $request->validate([
             'NUMERO_RAME' => 'sometimes|string|max:20',
             'TYPE_RAME' => 'sometimes|string|max:20',
-            'PARTIE_RAME' => 'sometimes|string|max:50',
             'DERNIERE_MAINTENANCE' => 'sometimes|date',
             'PROCHAINE_MAINTENANCE' => 'sometimes|date'
         ]);

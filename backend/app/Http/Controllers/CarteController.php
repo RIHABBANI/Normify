@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Carte;
 use App\Models\Rak;
+use App\Models\HistoriqueCarte;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CarteController extends Controller
 {
@@ -21,8 +23,25 @@ class CarteController extends Controller
             'STATU_CARTE' => 'required|string|max:50'
         ]);
 
-        $carte = Carte::create($validated);
-        return response()->json($carte, 201);
+        try {
+            DB::beginTransaction();
+            
+            // Create the carte
+            $carte = Carte::create($validated);
+            
+            // Automatically create history entry marking the carte as "installee"
+            HistoriqueCarte::create([
+                'ID_CARTE' => $carte->id,
+                'STATUS' => 'installee'
+            ]);
+            
+            DB::commit();
+            
+            return response()->json($carte, 201);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(['error' => 'Failed to create carte: ' . $e->getMessage()], 500);
+        }
     }
 
     public function show(Carte $carte)

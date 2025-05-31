@@ -95,7 +95,17 @@ Route::prefix('remplacement-cartes')->group(function () {
     Route::post('/', [RemplacementCarteController::class, 'store']);
     Route::get('/rame/{rame}', [RemplacementCarteController::class, 'getRemplacementsByRame']);
     Route::get('/carte/{carte}', [RemplacementCarteController::class, 'getRemplacementsByCarte']);
+    Route::get('/cartes-by-rak/{rakId}', [RemplacementCarteController::class, 'getCartesByRak']);
     Route::get('/{remplacementCarte}', [RemplacementCarteController::class, 'show']);
     Route::put('/{remplacementCarte}', [RemplacementCarteController::class, 'update']);
     Route::delete('/{remplacementCarte}', [RemplacementCarteController::class, 'destroy']);
+});
+
+Route::prefix('historique-cartes')->group(function () {
+    Route::get('/', [App\Http\Controllers\HistoriqueCarteController::class, 'index']);
+    Route::post('/', [App\Http\Controllers\HistoriqueCarteController::class, 'store']);
+    Route::get('/carte/{carteId}', [App\Http\Controllers\HistoriqueCarteController::class, 'getCarteHistory']);
+    Route::get('/{historiqueCarte}', [App\Http\Controllers\HistoriqueCarteController::class, 'show']);
+    Route::put('/{historiqueCarte}', [App\Http\Controllers\HistoriqueCarteController::class, 'update']);
+    Route::delete('/{historiqueCarte}', [App\Http\Controllers\HistoriqueCarteController::class, 'destroy']);
 });

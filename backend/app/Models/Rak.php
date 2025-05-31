@@ -13,6 +13,7 @@ class Rak extends Model
     protected $fillable = [
         'ID_RAME',
         'NOM_RAK',
+        'MOTRICE'
     ];
 
     public function rame()

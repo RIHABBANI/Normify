@@ -6,6 +6,7 @@ use App\Models\RemplacementCarte;
 use App\Models\Carte;
 use App\Models\Rak;
 use App\Models\Rame;
+use App\Models\HistoriqueCarte;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -15,44 +16,94 @@ class RemplacementCarteController extends Controller
     {
         $remplacements = RemplacementCarte::with(['carteAncienne', 'carteNouvelle'])->get();
         return response()->json($remplacements);
-    }      public function store(Request $request)
+    }    public function store(Request $request)
     {
         // Validate main fields
-        $validated = $request->validate([
+        $validationRules = [
             'ID_CARTE_ANCIENNE' => 'required|exists:cartes,id',
             'DATE_REMPLACEMENT' => 'required|date',
             'OBSERVATIONS' => 'nullable|string',
-            // For the new carte fields
-            'REFERENCE_CARTE' => 'required|string|max:225',
-            'STATU_CARTE' => 'required|string|max:50'
-        ]);
+            'replacement_type' => 'required|in:new,existing',
+            'RAISON_REMPLACEMENT' => 'required|string|in:en panne,en maintenance,hors service'
+        ];
+
+        // Add validation rules based on replacement type
+        if ($request->replacement_type === 'new') {
+            $validationRules['REFERENCE_CARTE'] = 'required|string|max:225';
+            $validationRules['STATU_CARTE'] = 'required|string|max:50';
+        } else {
+            $validationRules['ID_CARTE_NOUVELLE'] = 'required|exists:cartes,id';
+        }
+
+        $validated = $request->validate($validationRules);
         
-        // Get the old carte to find its RAK
-        $oldCarte = Carte::findOrFail($validated['ID_CARTE_ANCIENNE']);
-        
-        // Create the new carte in the same RAK as the old carte
-        $nouvelleCarte = Carte::create([
-            'ID_RAK' => $oldCarte->ID_RAK, // Use the same RAK as the old carte
-            'REFERENCE_CARTE' => $validated['REFERENCE_CARTE'],
-            'STATU_CARTE' => $validated['STATU_CARTE']
-        ]);
-        
-        // Update the status of the old carte to indicate it's no longer in use
-        $oldCarte->update([
-            'STATU_CARTE' => 'Hors service'
-        ]);
-        
-        // Create the replacement with the new carte ID
-        $remplacement = RemplacementCarte::create([
-            'ID_CARTE_ANCIENNE' => $validated['ID_CARTE_ANCIENNE'],
-            'ID_CARTE_NOUVELLE' => $nouvelleCarte->id,
-            'DATE_REMPLACEMENT' => $validated['DATE_REMPLACEMENT'],
-            'OBSERVATIONS' => $validated['OBSERVATIONS']
-        ]);
-        
-        // Load relationships and return
-        $remplacement->load(['carteAncienne', 'carteNouvelle']);
-        return response()->json($remplacement, 201);
+        try {
+            DB::beginTransaction();
+
+            // Get the old carte to find its RAK
+            $oldCarte = Carte::findOrFail($validated['ID_CARTE_ANCIENNE']);
+              $nouvelleCarte = null;
+              if ($validated['replacement_type'] === 'new') {
+                // Create the new carte in the same RAK as the old carte
+                $nouvelleCarte = Carte::create([
+                    'ID_RAK' => $oldCarte->ID_RAK,
+                    'REFERENCE_CARTE' => $validated['REFERENCE_CARTE'],
+                    'STATU_CARTE' => $validated['STATU_CARTE']
+                ]);
+            } else {
+                // Use existing carte
+                $nouvelleCarte = Carte::findOrFail($validated['ID_CARTE_NOUVELLE']);
+            }
+            
+            // Always mark old carte as "hors service" regardless of replacement type
+            // The RAISON_REMPLACEMENT indicates why it was replaced (en panne, en maintenance, etc.)
+            $oldCarte->update([
+                'STATU_CARTE' => 'hors service'
+            ]);
+              // Create the replacement with reason included in observations
+            $observations = $validated['OBSERVATIONS'] ?? '';
+            if (!empty($observations)) {
+                $observations = "Raison: " . $validated['RAISON_REMPLACEMENT'] . " | " . $observations;
+            } else {
+                $observations = "Raison: " . $validated['RAISON_REMPLACEMENT'];
+            }
+              // Create the replacement with reason included in observations
+            $observations = $validated['OBSERVATIONS'] ?? '';
+            if (!empty($observations)) {
+                $observations = "Raison: " . $validated['RAISON_REMPLACEMENT'] . " | " . $observations;
+            } else {
+                $observations = "Raison: " . $validated['RAISON_REMPLACEMENT'];
+            }
+            
+            $remplacement = RemplacementCarte::create([
+                'ID_CARTE_ANCIENNE' => $validated['ID_CARTE_ANCIENNE'],
+                'ID_CARTE_NOUVELLE' => $nouvelleCarte->id,
+                'DATE_REMPLACEMENT' => $validated['DATE_REMPLACEMENT'],
+                'OBSERVATIONS' => $observations
+            ]);
+
+            // Create historique_carte entries
+            // Old carte as "retiree"
+            HistoriqueCarte::create([
+                'ID_CARTE' => $oldCarte->id,
+                'STATUS' => 'retirée'
+            ]);
+
+            // New carte as "installee"
+            HistoriqueCarte::create([
+                'ID_CARTE' => $nouvelleCarte->id,
+                'STATUS' => 'installee'
+            ]);
+            
+            DB::commit();
+            
+            // Load relationships and return
+            $remplacement->load(['carteAncienne', 'carteNouvelle']);
+            return response()->json($remplacement, 201);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(['error' => 'Failed to create replacement: ' . $e->getMessage()], 500);
+        }
     }
 
     public function show(RemplacementCarte $remplacementCarte)
@@ -78,7 +129,7 @@ class RemplacementCarteController extends Controller
         $remplacementCarte->delete();
         return response()->json(null, 204);
     }   
-     public function getRemplacementsByRame($rameId)
+    public function getRemplacementsByRame($rameId)
     {
         // Get all raks belonging to the rame
         $raks = Rak::where('ID_RAME', $rameId)->pluck('id');
@@ -109,8 +160,20 @@ class RemplacementCarteController extends Controller
                 'user'
             ])
             ->orderBy('DATE_REMPLACEMENT', 'desc')
+            ->get();        
+        return response()->json($remplacements);
+    }
+
+    /**
+     * Get available cartes by RAK for existing carte selection
+     */
+    public function getCartesByRak($rakId)
+    {
+        $cartes = Carte::where('ID_RAK', $rakId)
+            ->where('STATU_CARTE', '!=', 'hors service')
+            ->with(['rak.rame'])
             ->get();
         
-        return response()->json($remplacements);
+        return response()->json($cartes);
     }
 }

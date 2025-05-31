@@ -16,7 +16,6 @@ class Rame extends Model
         'TYPE_RAME',
         'DERNIERE_MAINTENANCE',
         'PROCHAINE_MAINTENANCE',
-        'PARTIE_RAME',
     ];
 
     public function raks()

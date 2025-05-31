@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('raks', function (Blueprint $table) {
             $table->id();
             $table->foreignId('ID_RAME')->constrained('rames', 'id');
+            $table->enum('MOTRICE', ['M', 'MH']);
             $table->string('NOM_RAK', 50);
             $table->timestamps();
         });

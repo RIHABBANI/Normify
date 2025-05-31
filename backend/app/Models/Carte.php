@@ -25,4 +25,9 @@ class Carte extends Model
     {
         return $this->belongsToMany(Panne::class, 'subirs', 'ID_CARTE', 'ID_PANNE');
     }
+
+    public function historiqueCartes()
+    {
+        return $this->hasMany(HistoriqueCarte::class, 'ID_CARTE');
+    }
 }

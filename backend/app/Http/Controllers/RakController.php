@@ -19,6 +19,7 @@ class RakController extends Controller
         $validated = $request->validate([
             'ID_RAME' => 'required|exists:rames,id',
             'NOM_RAK' => 'required|string|max:50',
+            'MOTRICE' => 'required|in:M,MH'
         ]);
 
         $rak = Rak::create($validated);
@@ -40,7 +41,8 @@ class RakController extends Controller
     {
         $validated = $request->validate([
             'ID_RAME' => 'sometimes|exists:rames,id',
-            'NOM_RAK' => 'sometimes|string|max:50'
+            'NOM_RAK' => 'sometimes|string|max:50',
+            'MOTRICE' => 'sometimes|in:M,MH'
         ]);
 
         $rak->update($validated);
