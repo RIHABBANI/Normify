@@ -15,7 +15,6 @@ export const RamesTable = () => {
     const [success, setSuccess] = useState('');    const [formData, setFormData] = useState({
         NUMERO_RAME: '',
         TYPE_RAME: '',
-        PARTIE_RAME: '',
         DERNIERE_MAINTENANCE: '',
         PROCHAINE_MAINTENANCE: ''
     });
@@ -58,11 +57,9 @@ export const RamesTable = () => {
         setShowAddModal(true);
     };    const openEditModal = (rame, e) => {
         e.stopPropagation(); // Prevent navigation when clicking edit button
-        setSelectedRame(rame);
-        setFormData({
+        setSelectedRame(rame);        setFormData({
             NUMERO_RAME: rame.NUMERO_RAME || '',
             TYPE_RAME: rame.TYPE_RAME || '',
-            PARTIE_RAME: rame.PARTIE_RAME || '',
             DERNIERE_MAINTENANCE: rame.DERNIERE_MAINTENANCE || '',
             PROCHAINE_MAINTENANCE: rame.PROCHAINE_MAINTENANCE || ''
         });
@@ -73,11 +70,9 @@ export const RamesTable = () => {
         e.stopPropagation(); // Prevent navigation when clicking delete button
         setSelectedRame(rame);
         setShowDeleteModal(true);
-    };    const resetForm = () => {
-        setFormData({
+    };    const resetForm = () => {        setFormData({
             NUMERO_RAME: '',
             TYPE_RAME: '',
-            PARTIE_RAME: '',
             DERNIERE_MAINTENANCE: '',
             PROCHAINE_MAINTENANCE: ''
         });
@@ -172,13 +167,11 @@ export const RamesTable = () => {
             )}
 
             <div className="relative overflow-x-auto rounded-lg border border-gray-200">
-                <table className="w-full text-sm text-left text-gray-900 bg-white">                    <thead className="text-xs uppercase bg-gray-100 border-b border-gray-200">
-                        <tr>
+                <table className="w-full text-sm text-left text-gray-900 bg-white">                    <thead className="text-xs uppercase bg-gray-100 border-b border-gray-200">                        <tr>
                             <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">ID</th>
                             <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Numéro Rame</th>
                             <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Type Rame</th>
-                            <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Partie</th>
-                            <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Dernière Maintenance</th>
+                            <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Maintenance</th>
                             <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Actions</th>
                         </tr>
                     </thead>
@@ -192,10 +185,8 @@ export const RamesTable = () => {
                                 } border-b border-gray-200 hover:bg-blue-50 cursor-pointer transition-all duration-150 ${
                                     selectedRame === rame.id ? "bg-blue-50" : ""
                                 }`}
-                            >                                <td className="px-6 py-3 font-medium">{rame.id}</td>
-                                <td className="px-6 py-3">{rame.NUMERO_RAME}</td>
+                            >                                <td className="px-6 py-3 font-medium">{rame.id}</td>                                <td className="px-6 py-3">{rame.NUMERO_RAME}</td>
                                 <td className="px-6 py-3">{rame.TYPE_RAME}</td>
-                                <td className="px-6 py-3">{rame.PARTIE_RAME || 'Non spécifié'}</td>
                                 <td className="px-6 py-3">
                                     {rame.DERNIERE_MAINTENANCE ? new Date(rame.DERNIERE_MAINTENANCE).toLocaleDateString('fr-FR') : 'Non spécifié'} 
                                     {rame.PROCHAINE_MAINTENANCE && 
@@ -266,17 +257,6 @@ export const RamesTable = () => {
                                     type="text"
                                     name="TYPE_RAME"
                                     value={formData.TYPE_RAME}
-                                    onChange={handleInputChange}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-gray-700 text-sm font-bold mb-2">Partie de Rame</label>
-                                <input
-                                    type="text"
-                                    name="PARTIE_RAME"
-                                    value={formData.PARTIE_RAME}
                                     onChange={handleInputChange}
                                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                     required
@@ -355,17 +335,6 @@ export const RamesTable = () => {
                                     type="text"
                                     name="TYPE_RAME"
                                     value={formData.TYPE_RAME}
-                                    onChange={handleInputChange}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-gray-700 text-sm font-bold mb-2">Partie de Rame</label>
-                                <input
-                                    type="text"
-                                    name="PARTIE_RAME"
-                                    value={formData.PARTIE_RAME}
                                     onChange={handleInputChange}
                                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                     required

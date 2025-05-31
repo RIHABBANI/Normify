@@ -140,11 +140,9 @@ export const UsersTable = () => {
                 </div>
             </div>
         );
-    }
-
-    // Render the table
+    }    // Render the table
     return (
-        <div className="bg-white rounded-xl shadow-md p-6">
+        <div className="bg-white p-6 rounded-xl shadow-md">
             <div className="flex justify-between items-center mb-6">
                 <h1 className="text-2xl font-bold text-gray-800">Gestion des Utilisateurs</h1>
                 <button 
@@ -165,36 +163,34 @@ export const UsersTable = () => {
                     {success}
                 </div>
             )}
-            
-            <div className="overflow-x-auto rounded-lg border border-gray-200">
-                <table className="w-full border-collapse">
-                    <thead>
-                        <tr className="bg-gray-100 border-b">
-                            <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">ID</th>
-                            <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">Prénom</th>
-                            <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">Nom</th>
-                            <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">Téléphone</th>
-                            <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">Matricule</th>
-                            <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">Email</th>
-                            <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">Rôle</th>
-                            <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">Actions</th>
+              <div className="relative overflow-x-auto rounded-lg border border-gray-200">
+                <table className="w-full text-sm text-left text-gray-900 bg-white">
+                    <thead className="text-xs uppercase bg-gray-100 border-b border-gray-200">
+                        <tr>
+                            <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">ID</th>
+                            <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Prénom</th>
+                            <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Nom</th>
+                            <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Téléphone</th>
+                            <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Matricule</th>
+                            <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Email</th>
+                            <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Rôle</th>
+                            <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {users.map((user, index) => (
                             <tr
-                                key={user.id || index}
-                                className={`${
-                                    index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
-                                } border-b border-gray-200 hover:bg-blue-50 transition-colors duration-150`}
+                                key={user.id || index}                                className={`${
+                                    index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                                } border-b border-gray-200 hover:bg-blue-50 transition-all duration-150`}
                             >
-                                <td className="px-6 py-3 text-sm text-gray-900">{user.id}</td>
-                                <td className="px-6 py-3 text-sm font-medium text-gray-900">{user.first_name}</td>
-                                <td className="px-6 py-3 text-sm text-gray-900">{user.last_name}</td>
-                                <td className="px-6 py-3 text-sm text-gray-900">{user.phone}</td>
-                                <td className="px-6 py-3 text-sm text-gray-900">{user.matricule}</td>
-                                <td className="px-6 py-3 text-sm text-gray-900">{user.email}</td>
-                                <td className="px-6 py-3 text-sm text-gray-900">
+                                <td className="px-6 py-3 font-medium">{user.id}</td>
+                                <td className="px-6 py-3">{user.first_name}</td>
+                                <td className="px-6 py-3">{user.last_name}</td>
+                                <td className="px-6 py-3">{user.phone}</td>
+                                <td className="px-6 py-3">{user.matricule}</td>
+                                <td className="px-6 py-3">{user.email}</td>
+                                <td className="px-6 py-3">
                                     <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
                                         user.role === 'admin' ? 'bg-purple-100 text-purple-800' : 
                                         user.role === 'technicien' ? 'bg-blue-100 text-blue-800' : 
@@ -204,7 +200,7 @@ export const UsersTable = () => {
                                          user.role === 'technicien' ? 'Technicien' : 'Utilisateur'}
                                     </span>
                                 </td>
-                                <td className="px-6 py-3 text-sm text-gray-900">
+                                <td className="px-6 py-3">
                                     <div className="flex space-x-3">
                                         <button 
                                             onClick={() => openEditModal(user)}

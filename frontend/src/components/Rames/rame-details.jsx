@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getRameById } from '../../api/Rame/rame-api';
-import { getRemplacementsByRame, createRemplacementCarte } from '../../api/RemplacementCarte/remplacement-carte-api';
+import { getRemplacementsByRame, createRemplacementCarte, getCartesByRak } from '../../api/RemplacementCarte/remplacement-carte-api';
 import { getCartesByRameId } from '../../api/Carte/carte-api-by-rame';
 import { getRaksByRame } from '../../api/Rak/rak-api';
 
@@ -13,12 +13,17 @@ export const RameDetails = () => {
     const [showAddModal, setShowAddModal] = useState(false);    const [formData, setFormData] = useState({
         ID_CARTE_ANCIENNE: '',
         REFERENCE_CARTE: '',
-        STATU_CARTE: 'Fonctionnel',
+        STATU_CARTE: 'fonctionnel',
         DATE_REMPLACEMENT: new Date().toISOString().split('T')[0],
-        OBSERVATIONS: ''
+        OBSERVATIONS: '',
+        replacement_type: 'new', // 'new' or 'existing'
+        ID_CARTE_NOUVELLE: '',
+        selected_rak_id: '',
+        RAISON_REMPLACEMENT: '' // Reason why the old carte is being replaced
     });
     const [availableCartes, setAvailableCartes] = useState([]);
-    // const [availableRaks, setAvailableRaks] = useState([]);
+    const [availableRaks, setAvailableRaks] = useState([]);
+    const [rakCartes, setRakCartes] = useState([]);
     const [success, setSuccess] = useState('');
     const { rameId } = useParams();
     const navigate = useNavigate();
@@ -58,17 +63,41 @@ export const RameDetails = () => {
         if (rameId) {
             fetchData();
         }
-    }, [rameId]);
-
-    const handleInputChange = (e) => {
+    }, [rameId]);    const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData({
             ...formData,
             [name]: value
         });
+
+        // If the selected RAK changes, fetch cartes for that RAK
+        if (name === 'selected_rak_id' && value) {
+            fetchCartesByRak(value);
+        }
+
+        // Reset carte selection when switching replacement types
+        if (name === 'replacement_type') {
+            setFormData(prev => ({
+                ...prev,
+                [name]: value,
+                ID_CARTE_NOUVELLE: '',
+                selected_rak_id: '',
+                REFERENCE_CARTE: '',
+                STATU_CARTE: 'fonctionnel'
+            }));
+            setRakCartes([]);
+        }
     };
 
-    const handleAddReplacement = async (e) => {
+    const fetchCartesByRak = async (rakId) => {
+        try {
+            const cartes = await getCartesByRak(rakId);
+            setRakCartes(cartes);
+        } catch (error) {
+            console.error('Error fetching cartes by RAK:', error);
+            setRakCartes([]);
+        }
+    };    const handleAddReplacement = async (e) => {
         e.preventDefault();
         try {
             await createRemplacementCarte(formData);
@@ -77,14 +106,20 @@ export const RameDetails = () => {
             
             // Refresh the replacement data
             const updatedReplacements = await getRemplacementsByRame(rameId);
-            setRemplacements(updatedReplacements);            // Reset form
+            setRemplacements(updatedReplacements);
+              // Reset form
             setFormData({
                 ID_CARTE_ANCIENNE: '',
                 REFERENCE_CARTE: '',
-                STATU_CARTE: 'Fonctionnel',
+                STATU_CARTE: 'fonctionnel',
                 DATE_REMPLACEMENT: new Date().toISOString().split('T')[0],
-                OBSERVATIONS: ''
+                OBSERVATIONS: '',
+                replacement_type: 'new',
+                ID_CARTE_NOUVELLE: '',
+                selected_rak_id: '',
+                RAISON_REMPLACEMENT: ''
             });
+            setRakCartes([]);
         } catch (err) {
             setError(err.message);
         }
@@ -106,17 +141,22 @@ export const RameDetails = () => {
 
     const handleOpenAddModal = () => {
         setShowAddModal(true);
-    };
-
-    const handleCloseAddModal = () => {
+    };    const handleCloseAddModal = () => {
         setShowAddModal(false);
         setFormData({
             ID_CARTE_ANCIENNE: '',
             ID_CARTE_NOUVELLE: '',
             DATE_REMPLACEMENT: new Date().toISOString().split('T')[0],
-            OBSERVATIONS: ''
+            OBSERVATIONS: '',
+            replacement_type: 'new',
+            REFERENCE_CARTE: '',
+            STATU_CARTE: 'fonctionnel',
+            selected_rak_id: '',
+            RAISON_REMPLACEMENT: ''
         });
+        setRakCartes([]);
         setSuccess('');
+        setError('');
     };
 
     const handleChange = (e) => {
@@ -230,14 +270,9 @@ export const RameDetails = () => {
                     <div>
                         <h3 className="text-xs font-medium text-blue-600">Numéro de Rame</h3>
                         <p className="mt-1 font-medium text-gray-800">{rame.NUMERO_RAME}</p>
-                    </div>
-                    <div>
+                    </div>                    <div>
                         <h3 className="text-xs font-medium text-blue-600">Type de Rame</h3>
                         <p className="mt-1 font-medium text-gray-800">{rame.TYPE_RAME}</p>
-                    </div>
-                    <div>
-                        <h3 className="text-xs font-medium text-blue-600">Partie de Rame</h3>
-                        <p className="mt-1 font-medium text-gray-800">{rame.PARTIE_RAME || 'Non spécifié'}</p>
                     </div>
                     <div>
                         <h3 className="text-xs font-medium text-blue-600">Dernière Maintenance</h3>
@@ -274,35 +309,38 @@ export const RameDetails = () => {
                                 Voir les RAKs de cette rame
                             </button>
                         </div>
-                    ) : (
-                        <div className="overflow-x-auto">
-                            <table className="w-full text-sm text-left">                                <thead className="text-xs bg-gray-50 border-b border-gray-200">
+                    ) : (                        <div className="relative overflow-x-auto rounded-lg border border-gray-200">
+                            <table className="w-full text-sm text-left text-gray-900 bg-white">
+                                <thead className="text-xs uppercase bg-gray-100 border-b border-gray-200">
                                     <tr>
-                                        <th className="px-4 py-2 text-blue-700 font-medium">Date</th>
-                                        <th className="px-4 py-2 text-blue-700 font-medium">Carte Remplacée</th>
-                                        <th className="px-4 py-2 text-blue-700 font-medium">Nouvelle Carte</th>
-                                        <th className="px-4 py-2 text-blue-700 font-medium">Rack</th>
-                                        <th className="px-4 py-2 text-blue-700 font-medium">Observations</th>
+                                        <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Date</th>
+                                        <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Carte Remplacée</th>
+                                        <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Nouvelle Carte</th>
+                                        <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Rack</th>
+                                        <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Observations</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {remplacements.map((remplacement, index) => (                        <tr
+                                    {remplacements.map((remplacement, index) => (
+                                        <tr
                                             key={remplacement.id}
-                                            className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-blue-50 transition-colors`}
+                                            className={`${
+                                                index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                                            } border-b border-gray-200 hover:bg-blue-50 transition-all duration-150`}
                                         >
-                                            <td className="px-4 py-3 text-sm border-b border-gray-100">
+                                            <td className="px-6 py-3">
                                                 {formatDate(remplacement.DATE_REMPLACEMENT)}
                                             </td>
-                                            <td className="px-4 py-3 text-sm border-b border-gray-100">
-                                                <div className="text-gray-800">{remplacement.carte_ancienne.REFERENCE_CARTE || 'N/A'}</div>
+                                            <td className="px-6 py-3">
+                                                {remplacement.carte_ancienne.REFERENCE_CARTE || 'N/A'}
                                             </td>
-                                            <td className="px-4 py-3 text-sm border-b border-gray-100">
-                                                <div className="text-gray-800">{remplacement.carte_nouvelle.REFERENCE_CARTE || 'N/A'}</div>
+                                            <td className="px-6 py-3">
+                                                {remplacement.carte_nouvelle.REFERENCE_CARTE || 'N/A'}
                                             </td>
-                                            <td className="px-4 py-3 text-sm border-b border-gray-100">
-                                                <div className="text-gray-800">{remplacement.carte_ancienne.rak.NOM_RAK || 'N/A'}</div>
+                                            <td className="px-6 py-3">
+                                                {remplacement.carte_ancienne.rak.NOM_RAK || 'N/A'}
                                             </td>
-                                            <td className="px-4 py-3 text-sm border-b border-gray-100">
+                                            <td className="px-6 py-3">
                                                 {remplacement.OBSERVATIONS || 'Aucune observation'}
                                             </td>
                                         </tr>
@@ -397,14 +435,14 @@ export const RameDetails = () => {
                     </form>
                 </div>
             </div> */}
-            
-            {/* Add Replacement Modal */}
-            {showAddModal && (                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-xl">
+              {/* Add Replacement Modal */}
+            {showAddModal && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-lg p-6 w-full max-w-lg shadow-xl max-h-[90vh] overflow-y-auto">
                         <div className="flex justify-between items-center mb-4">
                             <h2 className="text-xl font-bold text-gray-800">Ajouter un remplacement de carte</h2>
                             <button 
-                                onClick={() => setShowAddModal(false)}
+                                onClick={handleCloseAddModal}
                                 className="text-gray-500 hover:text-gray-700"
                             >
                                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -424,9 +462,9 @@ export const RameDetails = () => {
                             </div>
                         )}
                         
-                        <form onSubmit={handleAddReplacement} className="space-y-4">
-                            <div>
-                                <label className="block text-gray-700 text-sm font-bold mb-2">Carte Ancienne</label>                                <select
+                        <form onSubmit={handleAddReplacement} className="space-y-4">                            <div>
+                                <label className="block text-gray-700 text-sm font-bold mb-2">Carte à remplacer</label>
+                                <select
                                     name="ID_CARTE_ANCIENNE"
                                     value={formData.ID_CARTE_ANCIENNE}
                                     onChange={handleInputChange}
@@ -440,37 +478,144 @@ export const RameDetails = () => {
                                         </option>
                                     ))}
                                 </select>
-                                <p className="text-xs text-blue-500 mt-1">La nouvelle carte sera créée dans le même rack que la carte ancienne.</p>
-                            </div>                            <h3 className="font-bold text-gray-700 mt-4 mb-2">Nouvelle Carte</h3>                            <div className="text-sm text-blue-600 mb-2">
-                                <p>La nouvelle carte sera créée dans le même rack que la carte remplacée.</p>
-                            </div>
+                            </div>                            {/* Replacement Reason */}
                             <div>
-                                <label className="block text-gray-700 text-sm font-bold mb-2">Référence de Carte</label>                                <input
-                                    type="text"
-                                    name="REFERENCE_CARTE"
-                                    value={formData.REFERENCE_CARTE}
-                                    onChange={handleInputChange}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                    placeholder="Entrez la référence de la nouvelle carte"
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-gray-700 text-sm font-bold mb-2">Statut</label>                                <select
-                                    name="STATU_CARTE"
-                                    value={formData.STATU_CARTE}
+                                <label className="block text-gray-700 text-sm font-bold mb-2">Raison du remplacement (statut actuel de la carte défaillante)</label>
+                                <select
+                                    name="RAISON_REMPLACEMENT"
+                                    value={formData.RAISON_REMPLACEMENT}
                                     onChange={handleInputChange}
                                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                     required
                                 >
-                                    <option value="Fonctionnel">Fonctionnel</option>
-                                    <option value="En panne">En panne</option>
-                                    <option value="En réparation">En réparation</option>
-                                    <option value="Hors service">Hors service</option>
+                                    <option value="">Sélectionner la raison</option>
+                                    <option value="en panne">En panne</option>
+                                    <option value="en maintenance">En maintenance</option>
+                                    <option value="hors service">Hors service</option>
                                 </select>
+                                <p className="text-xs text-gray-500 mt-1">
+                                    Après le remplacement, l'ancienne carte sera automatiquement marquée comme "hors service"
+                                </p>
                             </div>
+
+                            {/* Replacement Type Selection */}
                             <div>
-                                <label className="block text-gray-700 text-sm font-bold mb-2">Date de Remplacement</label>                                <input
+                                <label className="block text-gray-700 text-sm font-bold mb-2">Type de remplacement</label>
+                                <div className="space-y-2">
+                                    <label className="flex items-center">
+                                        <input
+                                            type="radio"
+                                            name="replacement_type"
+                                            value="new"
+                                            checked={formData.replacement_type === 'new'}
+                                            onChange={handleInputChange}
+                                            className="mr-2 text-blue-500 focus:ring-blue-500"
+                                        />
+                                        <span className="text-sm text-gray-700">Créer une nouvelle carte</span>
+                                    </label>
+                                    <label className="flex items-center">
+                                        <input
+                                            type="radio"
+                                            name="replacement_type"
+                                            value="existing"
+                                            checked={formData.replacement_type === 'existing'}
+                                            onChange={handleInputChange}
+                                            className="mr-2 text-blue-500 focus:ring-blue-500"
+                                        />
+                                        <span className="text-sm text-gray-700">Utiliser une carte existante d'un autre rack</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            {/* New Carte Form Fields */}
+                            {formData.replacement_type === 'new' && (
+                                <>
+                                    <div className="bg-blue-50 p-3 rounded-md">
+                                        <p className="text-sm text-blue-700">
+                                            <strong>Info:</strong> La nouvelle carte sera créée dans le même rack que la carte remplacée.
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <label className="block text-gray-700 text-sm font-bold mb-2">Référence de la nouvelle carte</label>
+                                        <input
+                                            type="text"
+                                            name="REFERENCE_CARTE"
+                                            value={formData.REFERENCE_CARTE}
+                                            onChange={handleInputChange}
+                                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                            placeholder="Entrez la référence de la nouvelle carte"
+                                            required={formData.replacement_type === 'new'}
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-gray-700 text-sm font-bold mb-2">Statut de la nouvelle carte</label>
+                                        <select
+                                            name="STATU_CARTE"
+                                            value={formData.STATU_CARTE}
+                                            onChange={handleInputChange}
+                                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                            required={formData.replacement_type === 'new'}
+                                        >
+                                            <option value="fonctionnel">Fonctionnel</option>
+                                            <option value="en panne">En panne</option>
+                                            <option value="en maintenance">En maintenance</option>
+                                            <option value="hors service">Hors service</option>
+                                        </select>
+                                    </div>
+                                </>
+                            )}
+
+                            {/* Existing Carte Selection */}
+                            {formData.replacement_type === 'existing' && (
+                                <>
+                                    <div>
+                                        <label className="block text-gray-700 text-sm font-bold mb-2">Sélectionner un rack</label>
+                                        <select
+                                            name="selected_rak_id"
+                                            value={formData.selected_rak_id}
+                                            onChange={handleInputChange}
+                                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                            required={formData.replacement_type === 'existing'}
+                                        >
+                                            <option value="">Sélectionner un rack</option>
+                                            {availableRaks.map(rak => (
+                                                <option key={rak.id} value={rak.id}>
+                                                    {rak.NOM_RAK} ({rak.MOTRICE})
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    
+                                    {formData.selected_rak_id && (
+                                        <div>
+                                            <label className="block text-gray-700 text-sm font-bold mb-2">Carte existante</label>
+                                            <select
+                                                name="ID_CARTE_NOUVELLE"
+                                                value={formData.ID_CARTE_NOUVELLE}
+                                                onChange={handleInputChange}
+                                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                                required={formData.replacement_type === 'existing'}
+                                            >
+                                                <option value="">Sélectionner une carte</option>
+                                                {rakCartes.map(carte => (
+                                                    <option key={carte.id} value={carte.id}>
+                                                        {carte.REFERENCE_CARTE} ({carte.STATU_CARTE})
+                                                    </option>
+                                                ))}
+                                            </select>
+                                            {rakCartes.length === 0 && formData.selected_rak_id && (
+                                                <p className="text-sm text-yellow-600 mt-1">
+                                                    Aucune carte disponible dans ce rack.
+                                                </p>
+                                            )}
+                                        </div>
+                                    )}
+                                </>
+                            )}
+
+                            <div>
+                                <label className="block text-gray-700 text-sm font-bold mb-2">Date de remplacement</label>
+                                <input
                                     type="date"
                                     name="DATE_REMPLACEMENT"
                                     value={formData.DATE_REMPLACEMENT}
@@ -479,27 +624,32 @@ export const RameDetails = () => {
                                     required
                                 />
                             </div>
+                            
                             <div>
-                                <label className="block text-gray-700 text-sm font-bold mb-2">Observations</label>                                <textarea
+                                <label className="block text-gray-700 text-sm font-bold mb-2">Observations</label>
+                                <textarea
                                     name="OBSERVATIONS"
                                     value={formData.OBSERVATIONS}
                                     onChange={handleInputChange}
                                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                     rows="3"
+                                    placeholder="Ajoutez des observations sur le remplacement..."
                                 ></textarea>
                             </div>
-                            <div                                className="flex justify-end space-x-3 mt-6">
+                            
+                            <div className="flex justify-end space-x-3 mt-6">
                                 <button
                                     type="button"
-                                    onClick={() => setShowAddModal(false)}
+                                    onClick={handleCloseAddModal}
                                     className="px-4 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors text-sm"
                                 >
                                     Annuler
-                                </button>                                <button
+                                </button>
+                                <button
                                     type="submit"
                                     className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors text-sm shadow-sm"
                                 >
-                                    Ajouter
+                                    Enregistrer le remplacement
                                 </button>
                             </div>
                         </form>

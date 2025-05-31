@@ -13,7 +13,8 @@ export const RaksByRame = () => {
     const [selectedRak, setSelectedRak] = useState(null);
     const [formData, setFormData] = useState({
         NOM_RAK: '',
-        ID_RAME: ''
+        ID_RAME: '',
+        MOTRICE: 'M'
     });
     
     const { rameId } = useParams();
@@ -48,7 +49,8 @@ export const RaksByRame = () => {
     const resetForm = () => {
         setFormData({
             NOM_RAK: '',
-            ID_RAME: rameId
+            ID_RAME: rameId,
+            MOTRICE: 'M'
         });
         setError('');
         setSuccess('');
@@ -68,7 +70,8 @@ export const RaksByRame = () => {
         setSelectedRak(rak);
         setFormData({
             NOM_RAK: rak.NOM_RAK || '',
-            ID_RAME: rameId
+            ID_RAME: rameId,
+            MOTRICE: rak.MOTRICE || 'M'
         });
         setShowEditModal(true);
     };
@@ -212,8 +215,8 @@ export const RaksByRame = () => {
                             <thead className="text-xs uppercase bg-gray-100 border-b border-gray-200">
                                 <tr>
                                     <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">ID</th>
-                                    {/* <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">ID RAME</th> */}
                                     <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Nom Rack</th>
+                                    <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">MOTRICE</th>
                                     <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Actions</th>
                                 </tr>
                             </thead>
@@ -227,10 +230,18 @@ export const RaksByRame = () => {
                                         onClick={() => handleRakClick(rak)}
                                     >
                                         <td className="px-6 py-3 font-medium">{rak.id}</td>
-                                        {/* <td className="px-6 py-3">{rak.ID_RAME}</td> */}
                                         <td className="px-6 py-3">{rak.NOM_RAK}</td>
-                                        <td className="px-2 py-2">
-                                            <div className="flex space-x-2 justify-end">
+                                        <td className="px-6 py-3">
+                                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                                rak.MOTRICE === 'M' 
+                                                    ? 'bg-blue-100 text-blue-800' 
+                                                    : 'bg-green-100 text-green-800'
+                                            }`}>
+                                                {rak.MOTRICE === 'M' ? 'Motrice' : 'Motrice Haute'}
+                                            </span>
+                                        </td>
+                                        <td className="px-6 py-3">
+                                            <div className="flex space-x-3">
                                                 <button 
                                                     onClick={(e) => openEditModal(rak, e)}
                                                     className="text-blue-600 hover:text-blue-800 p-1"
@@ -303,6 +314,20 @@ export const RaksByRame = () => {
                                     required
                                 />
                             </div>
+
+                            <div>
+                                <label className="block text-gray-700 text-sm font-bold mb-2">MOTRICE</label>
+                                <select
+                                    name="MOTRICE"
+                                    value={formData.MOTRICE}
+                                    onChange={handleInputChange}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                    required
+                                >
+                                    <option value="M">M</option>
+                                    <option value="MH">MH</option>
+                                </select>
+                            </div>
                             
                             <div className="hidden">
                                 <input type="hidden" name="ID_RAME" value={rameId} />
@@ -354,6 +379,20 @@ export const RaksByRame = () => {
                                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                     required
                                 />
+                            </div>
+
+                            <div>
+                                <label className="block text-gray-700 text-sm font-bold mb-2">MOTRICE</label>
+                                <select
+                                    name="MOTRICE"
+                                    value={formData.MOTRICE}
+                                    onChange={handleInputChange}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                    required
+                                >
+                                    <option value="M">M</option>
+                                    <option value="MH">MH</option>
+                                </select>
                             </div>
                             
                             <div className="hidden">

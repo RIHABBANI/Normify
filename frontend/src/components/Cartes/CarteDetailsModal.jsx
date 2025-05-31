@@ -55,15 +55,24 @@ export const CarteDetailsModal = ({ isOpen, onClose, carteId }) => {
                     </div>
                 ) : carte ? (
                     <div className="space-y-4">
-                        <div className={`h-2 ${carte.STATU_CARTE === 'Fonctionnel' ? 'bg-green-500' : carte.STATU_CARTE === 'En panne' ? 'bg-red-500' : 'bg-yellow-500'}`}></div>
+                        <div className={`h-2 ${
+                            carte.STATU_CARTE === 'Fonctionnel' 
+                                ? 'bg-green-500' 
+                                : carte.STATU_CARTE === 'En panne' 
+                                ? 'bg-red-500' 
+                                : carte.STATU_CARTE === 'hors service'
+                                ? 'bg-gray-500'
+                                : 'bg-yellow-500'
+                        }`}></div>
                         
                         <div className="flex justify-between items-center">
-                            <h3 className="text-lg font-semibold">{carte.REFERENCE_CARTE}</h3>
-                            <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                            <h3 className="text-lg font-semibold">{carte.REFERENCE_CARTE}</h3>                            <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${
                                 carte.STATU_CARTE === 'Fonctionnel' 
                                     ? 'bg-green-100 text-green-800' 
                                     : carte.STATU_CARTE === 'En panne' 
                                     ? 'bg-red-100 text-red-800' 
+                                    : carte.STATU_CARTE === 'hors service'
+                                    ? 'bg-gray-100 text-gray-800'
                                     : 'bg-yellow-100 text-yellow-800'
                             }`}>
                                 {carte.STATU_CARTE}

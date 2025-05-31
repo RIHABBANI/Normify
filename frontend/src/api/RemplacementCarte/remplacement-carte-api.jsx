@@ -97,3 +97,17 @@ export const deleteRemplacementCarte = async (remplacementId) => {
         }
     }
 };
+
+// Function to get available cartes by RAK ID for existing carte selection
+export const getCartesByRak = async (rakId) => {
+    try {
+        const response = await API.get(`/remplacement-cartes/cartes-by-rak/${rakId}`);
+        return response.data;
+    } catch (err) {
+        if (err.response) {
+            throw new Error(err.response.data.message || 'Failed to fetch cartes by RAK');
+        } else {
+            throw new Error('Network error. Please try again.');
+        }
+    }
+};

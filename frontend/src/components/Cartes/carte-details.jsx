@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { getCarteById, updateCarte, deleteCarte } from '../../api/Carte/carte-api';
 import { getRaks } from '../../api/Rak/rak-api';
 import DeleteConfirmationModal from '../Common/DeleteConfirmationModal';
-import CarteReplacementHistory from './CarteReplacementHistory';
+import CarteStatusHistory from './CarteStatusHistory';
 
 export const CarteDetails = () => {
     const { carteId } = useParams();
@@ -21,12 +21,11 @@ export const CarteDetails = () => {
         REFERENCE_CARTE: '',
         STATU_CARTE: ''
     });
-    
-    const statusOptions = [
+      const statusOptions = [
         'Fonctionnel', 
         'En panne',
-        'En réparation',
-        'Hors service'
+        'En maintenance',
+        'hors service'
     ];
 
     // Fetch the carte details
@@ -194,7 +193,7 @@ export const CarteDetails = () => {
             </div>
 
             {/* Carte details card */}
-            <div className="bg-white rounded-xl shadow-md overflow-hidden">
+            <div className="bg-white  rounded-xl shadow-md overflow-hidden">
                 <div className="p-6">
                     <h1 className="text-3xl font-bold text-gray-800 mb-4">
                         Carte {carte.REFERENCE_CARTE}
@@ -204,10 +203,8 @@ export const CarteDetails = () => {
                         <div className="mb-4 p-4 bg-red-50 rounded-md border border-red-200">
                             <p className="text-red-600">{error}</p>
                         </div>
-                    )}
-
-                    <form>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    )}                    <form>
+                        <div className="grid grid-cols-1 align-center md:grid-cols-4 gap-6 mt-6">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">
                                     Référence Carte
@@ -246,7 +243,8 @@ export const CarteDetails = () => {
                                     <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium 
                                         ${carte.STATU_CARTE === 'Fonctionnel' ? 'bg-green-100 text-green-800' : 
                                         carte.STATU_CARTE === 'En panne' ? 'bg-red-100 text-red-800' : 
-                                        carte.STATU_CARTE === 'En réparation' ? 'bg-yellow-100 text-yellow-800' : 
+                                        carte.STATU_CARTE === 'En maintenance' ? 'bg-yellow-100 text-yellow-800' : 
+                                        carte.STATU_CARTE === 'hors service' ? 'bg-gray-100 text-gray-800' :
                                         'bg-gray-100 text-gray-800'}`}
                                     >
                                         {carte.STATU_CARTE}
@@ -267,21 +265,37 @@ export const CarteDetails = () => {
                                     >
                                         {raks.map(rak => (
                                             <option key={rak.id} value={rak.id}>
-                                                {rak.REFERENCE_RAK}
+                                                {rak.NOM_RAK}
                                             </option>
                                         ))}
                                     </select>
                                 ) : (
-                                    <p className="text-lg">{carte.rak?.REFERENCE_RAK}</p>
+                                    <p className="text-lg">{carte.rak?.NOM_RAK}</p>
                                 )}
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    Motrice
+                                </label>
+                                <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium 
+                                    ${carte.rak?.MOTRICE === 'M' ? 'bg-blue-100 text-blue-800' : 
+                                    carte.rak?.MOTRICE === 'MH' ? 'bg-purple-100 text-purple-800' :
+                                    'bg-gray-100 text-gray-800'}`}
+                                >
+                                    {carte.rak?.MOTRICE || 'N/A'}
+                                </div>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>            {/* Replacement History Section */}
+
+
+            {/* Status History Section */}
             <div className="mt-8 bg-white rounded-xl shadow-md overflow-hidden p-6">
-                <h2 className="text-2xl font-bold text-gray-800 mb-4">Historique des Remplacements</h2>
-                <CarteReplacementHistory carteId={carteId} />
+                <h2 className="text-2xl font-bold text-gray-800 mb-4">Historique des Statuts</h2>
+                <CarteStatusHistory carteId={carteId} />
             </div>
 
             {/* Delete Confirmation Modal */}

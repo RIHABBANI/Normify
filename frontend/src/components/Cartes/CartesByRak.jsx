@@ -80,21 +80,17 @@ export const CartesByRak = () => {
                     <h3 className="text-xl font-semibold text-yellow-700 mb-2">Aucune Carte trouvée</h3>
                     <p className="text-yellow-600">Ce rak n'a pas de cartes associées.</p>
                 </div>
-            ) : (
-                <div className="relative overflow-x-auto rounded-lg border border-gray-200">
+            ) : (                <div className="relative overflow-x-auto rounded-lg border border-gray-200">
                     <table className="w-full text-sm text-left text-gray-900 bg-white">
                         <thead className="text-xs uppercase bg-gray-100 border-b border-gray-200">
                             <tr>
-                                <th scope="col" className="p-3">
-                                    <div className="flex items-center">
+                                <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">
+                                    <div className="flex items-center justify-center">
                                         <input
                                             id="checkbox-all-search"
                                             type="checkbox"
                                             className="w-4 h-4 text-blue-500 bg-white rounded focus:ring-2 focus:ring-blue-400"
                                         />
-                                        <label htmlFor="checkbox-all-search" className="sr-only">
-                                            checkbox
-                                        </label>
                                     </div>
                                 </th>
                                 <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">ID</th>
@@ -104,40 +100,38 @@ export const CartesByRak = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {cartes.map((carte, index) => (                                <tr
+                            {cartes.map((carte, index) => (
+                                <tr
                                     key={carte.id || index}
                                     className={`${
                                         index % 2 === 0 ? "bg-white" : "bg-gray-50"
                                     } border-b border-gray-200 hover:bg-blue-50 transition-all duration-150 cursor-pointer`}
                                     onClick={() => navigate(`/cartes/${carte.id}`)}
-                                >
-                                    <td className="w-4 p-4">
-                                        <div className="flex items-center">
+                                >                                    <td className="px-6 py-3">
+                                        <div className="flex items-center justify-center">
                                             <input
                                                 id={`checkbox-${carte.id}`}
                                                 type="checkbox"
                                                 className="w-4 h-4 text-blue-500 bg-gray-200 rounded focus:ring-2 focus:ring-blue-400"
                                             />
-                                            <label htmlFor={`checkbox-${carte.id}`} className="sr-only">
-                                                checkbox
-                                            </label>
                                         </div>
                                     </td>
                                     <td className="px-6 py-3 font-medium">{carte.id}</td>
                                     <td className="px-6 py-3">{carte.REFERENCE_CARTE}</td>
-                                    <td className="px-6 py-3">
-                                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                    <td className="px-6 py-3">                                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                                             carte.STATU_CARTE === 'Fonctionnel' 
                                                 ? 'bg-green-100 text-green-800' 
                                                 : carte.STATU_CARTE === 'En panne' 
                                                 ? 'bg-red-100 text-red-800' 
+                                                : carte.STATU_CARTE === 'hors service'
+                                                ? 'bg-gray-100 text-gray-800'
                                                 : 'bg-yellow-100 text-yellow-800'
                                         }`}>
                                             {carte.STATU_CARTE}
                                         </span>
                                     </td>
                                     <td className="px-6 py-3">
-                                        <div className="flex space-x-3">                                            <button 
+                                        <div className="flex space-x-3"><button 
                                                 className="text-blue-600 hover:text-blue-800"
                                                 title="Détails"
                                                 onClick={(e) => {

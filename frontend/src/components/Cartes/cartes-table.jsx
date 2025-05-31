@@ -168,9 +168,7 @@ export const CartesTable = () => {
         } finally {
             setIsDeleting(false);
         }
-    };
-
-    // Helper function to get the color class based on status
+    };    // Helper function to get the color class based on status
     const getStatusClass = (status) => {
         switch (status) {
             case 'Fonctionnel':
@@ -179,6 +177,8 @@ export const CartesTable = () => {
                 return 'bg-red-100 text-red-800';
             case 'En maintenance':
                 return 'bg-yellow-100 text-yellow-800';
+            case 'hors service':
+                return 'bg-gray-100 text-gray-800';
             default:
                 return 'bg-gray-100 text-gray-800';
         }
@@ -268,8 +268,7 @@ export const CartesTable = () => {
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
-                    </div>
-                    <select 
+                    </div>                    <select 
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
                         value={statusFilter}
                         onChange={(e) => setStatusFilter(e.target.value)}
@@ -278,6 +277,7 @@ export const CartesTable = () => {
                         <option value="Fonctionnel">Fonctionnel</option>
                         <option value="En panne">En panne</option>
                         <option value="En maintenance">En maintenance</option>
+                        <option value="hors service">Hors service</option>
                     </select>
                 </div>
 
@@ -286,23 +286,10 @@ export const CartesTable = () => {
                         <h3 className="text-xl font-semibold text-yellow-700 mb-2">Aucune carte trouvée</h3>
                         <p className="text-yellow-600">Essayez d'ajuster vos critères de recherche ou de filtre.</p>
                     </div>
-                ) : viewMode === 'table' ? (
-                    <div className="relative overflow-x-auto rounded-lg border border-gray-200">
+                ) : viewMode === 'table' ? (                    <div className="relative overflow-x-auto rounded-lg border border-gray-200">
                         <table className="w-full text-sm text-left text-gray-900 bg-white">
                             <thead className="text-xs uppercase bg-gray-100 border-b border-gray-200">
                                 <tr>
-                                    <th scope="col" className="p-3">
-                                        <div className="flex items-center">
-                                            <input
-                                                id="checkbox-all-search"
-                                                type="checkbox"
-                                                className="w-4 h-4 text-blue-500 bg-white rounded focus:ring-2 focus:ring-blue-400"
-                                            />
-                                            <label htmlFor="checkbox-all-search" className="sr-only">
-                                                checkbox
-                                            </label>
-                                        </div>
-                                    </th>
                                     <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">ID</th>
                                     <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Rack ID</th>
                                     <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Référence</th>
@@ -314,21 +301,8 @@ export const CartesTable = () => {
                                 {filteredCartes.map((carte, index) => (
                                     <tr
                                         key={carte.id || index}
-                                        className={`${index % 2 === 0 ? "bg-white" : "bg-gray-50"} border-b border-gray-200 hover:bg-blue-50 transition-all duration-150 cursor-pointer`}
-                                        onClick={() => navigate(`/cartes/${carte.id}`)}
+                                        className={`${index % 2 === 0 ? "bg-white" : "bg-gray-50"} border-b border-gray-200 hover:bg-blue-50 transition-all duration-150 cursor-pointer`}                                        onClick={() => navigate(`/cartes/${carte.id}`)}
                                     >
-                                        <td className="w-4 p-4" onClick={(e) => e.stopPropagation()}>
-                                            <div className="flex items-center">
-                                                <input
-                                                    id={`checkbox-${carte.id}`}
-                                                    type="checkbox"
-                                                    className="w-4 h-4 text-blue-500 bg-gray-200 rounded focus:ring-2 focus:ring-blue-400"
-                                                />
-                                                <label htmlFor={`checkbox-${carte.id}`} className="sr-only">
-                                                    checkbox
-                                                </label>
-                                            </div>
-                                        </td>
                                         <td className="px-6 py-3 font-medium">{carte.id}</td>
                                         <td className="px-6 py-3">{carte.ID_RAK}</td>
                                         <td className="px-6 py-3">{carte.REFERENCE_CARTE}</td>
@@ -337,8 +311,8 @@ export const CartesTable = () => {
                                                 {carte.STATU_CARTE}
                                             </span>
                                         </td>
-                                        <td className="px-2 py-2" onClick={(e) => e.stopPropagation()}>
-                                            <div className="flex space-x-2 justify-end">
+                                        <td className="px-6 py-3">
+                                            <div className="flex space-x-3">
                                                 <button 
                                                     className="text-blue-600 hover:text-blue-800 p-1"
                                                     title="Détails"
@@ -384,7 +358,15 @@ export const CartesTable = () => {
                                 key={carte.id || index}
                                 className="bg-white rounded-lg border border-gray-200 shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden"
                             >
-                                <div className={`h-2 ${carte.STATU_CARTE === 'Fonctionnel' ? 'bg-green-500' : carte.STATU_CARTE === 'En panne' ? 'bg-red-500' : 'bg-yellow-500'}`}></div>
+                                <div className={`h-2 ${
+                                    carte.STATU_CARTE === 'Fonctionnel' 
+                                        ? 'bg-green-500' 
+                                        : carte.STATU_CARTE === 'En panne' 
+                                        ? 'bg-red-500' 
+                                        : carte.STATU_CARTE === 'hors service'
+                                        ? 'bg-gray-500'
+                                        : 'bg-yellow-500'
+                                }`}></div>
                                 <div className="p-5">
                                     <div className="flex items-center justify-between mb-4">
                                         <h3 className="text-lg font-bold text-gray-800 truncate" title={carte.REFERENCE_CARTE}>
@@ -510,8 +492,7 @@ export const CartesTable = () => {
                             <div className="mb-6">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="STATU_CARTE">
                                     Statut
-                                </label>
-                                <select 
+                                </label>                                <select 
                                     id="STATU_CARTE"
                                     name="STATU_CARTE"
                                     value={formData.STATU_CARTE} 
@@ -522,6 +503,7 @@ export const CartesTable = () => {
                                     <option value="Fonctionnel">Fonctionnel</option>
                                     <option value="En panne">En panne</option>
                                     <option value="En maintenance">En maintenance</option>
+                                    <option value="hors service">Hors service</option>
                                 </select>
                             </div>
 
@@ -610,8 +592,7 @@ export const CartesTable = () => {
                             <div className="mb-6">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="edit_STATU_CARTE">
                                     Statut
-                                </label>
-                                <select 
+                                </label>                                <select 
                                     id="edit_STATU_CARTE"
                                     name="STATU_CARTE"
                                     value={formData.STATU_CARTE} 
@@ -622,6 +603,7 @@ export const CartesTable = () => {
                                     <option value="Fonctionnel">Fonctionnel</option>
                                     <option value="En panne">En panne</option>
                                     <option value="En maintenance">En maintenance</option>
+                                    <option value="hors service">Hors service</option>
                                 </select>
                             </div>
 
