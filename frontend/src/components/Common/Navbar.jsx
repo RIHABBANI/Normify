@@ -44,7 +44,7 @@ const Navbar = () => {
                 <div className="absolute top-6 right-0 w-56 z-50 p-4 bg-white border rounded-lg shadow-lg">
                     {/* Full Name */}
                     <p className="text-base font-medium text-gray-800">
-                        {userData.first_name + ' ' + userData.last_name}
+                        {userData.PRENOM_UTILISATEUR + ' ' + userData.NOM_UTILISATEUR}
                     </p>
 
                     {/* Email */}

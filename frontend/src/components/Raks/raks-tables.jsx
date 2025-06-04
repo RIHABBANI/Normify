@@ -202,7 +202,7 @@ export const RaksTable = () => {
                             <thead className="text-xs uppercase bg-gray-100 border-b border-gray-200">
                                 <tr>
                                     <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">ID</th>
-                                    <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">ID RAME</th>
+                                    <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">NUMERO RAME</th>
                                     <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Nom Rack</th>
                                     <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">MOTRICE</th>
                                     <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Actions</th>
@@ -217,17 +217,9 @@ export const RaksTable = () => {
                                         } border-b border-gray-200 hover:bg-blue-50 cursor-pointer transition-all duration-150`}
                                         onClick={() => handleRakClick(rak)}                                    >
                                         <td className="px-6 py-3 font-medium">{rak.id}</td>
-                                        <td className="px-6 py-3">{rak.ID_RAME}</td>
+                                        <td className="px-6 py-3">{rak.rame.NUMERO_RAME}</td>
                                         <td className="px-6 py-3">{rak.NOM_RAK}</td>
-                                        <td className="px-6 py-3">
-                                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                                rak.MOTRICE === 'M' 
-                                                    ? 'bg-blue-100 text-blue-800' 
-                                                    : 'bg-green-100 text-green-800'
-                                            }`}>
-                                                {rak.MOTRICE === 'M' ? 'Motrice' : 'Motrice Haute'}
-                                            </span>
-                                        </td>
+                                        <td className="px-6 py-3">{rak.MOTRICE}</td>
                                         <td className="px-6 py-3">
                                             <div className="flex space-x-3">
                                                 <button 

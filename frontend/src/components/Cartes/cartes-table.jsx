@@ -291,7 +291,7 @@ export const CartesTable = () => {
                             <thead className="text-xs uppercase bg-gray-100 border-b border-gray-200">
                                 <tr>
                                     <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">ID</th>
-                                    <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Rack ID</th>
+                                    <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">NOM RAK</th>
                                     <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Référence</th>
                                     <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Statut</th>
                                     <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Actions</th>
@@ -304,7 +304,7 @@ export const CartesTable = () => {
                                         className={`${index % 2 === 0 ? "bg-white" : "bg-gray-50"} border-b border-gray-200 hover:bg-blue-50 transition-all duration-150 cursor-pointer`}                                        onClick={() => navigate(`/cartes/${carte.id}`)}
                                     >
                                         <td className="px-6 py-3 font-medium">{carte.id}</td>
-                                        <td className="px-6 py-3">{carte.ID_RAK}</td>
+                                        <td className="px-6 py-3">{carte.rak.NOM_RAK}</td>
                                         <td className="px-6 py-3">{carte.REFERENCE_CARTE}</td>
                                         <td className="px-6 py-3">
                                             <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusClass(carte.STATU_CARTE)}`}>

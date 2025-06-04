@@ -10,7 +10,7 @@ class RakController extends Controller
 {
     public function index()
     {
-        $raks = Rak::all();
+        $raks = Rak::with('rame')->get();
         return response()->json($raks);
     }
 

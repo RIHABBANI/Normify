@@ -12,7 +12,7 @@ export const UsersTable = () => {
         first_name: '',
         last_name: '',
         phone: '',
-        matricule: '',
+        // matricule: '',
         email: '',
         role: '',
         password: '',
@@ -103,12 +103,12 @@ export const UsersTable = () => {
     };    const openEditModal = (user) => {
         setSelectedUser(user);
         setFormData({
-            first_name: user.first_name || '',
-            last_name: user.last_name || '',
-            phone: user.phone || '',
-            matricule: user.matricule || '',
+            first_name: user.PRENOM_UTILISATEUR || '',
+            last_name: user.NOM_UTILISATEUR || '',
+            phone: user.NUMERO_TELEPHONE || '',
+            // matricule: user.matricule || '',
             email: user.email || '',
-            role: user.role || '',
+            role: user.ROLE_UTILISATEUR || '',
         });
         setShowEditModal(true);
     };
@@ -121,7 +121,7 @@ export const UsersTable = () => {
             first_name: '',
             last_name: '',
             phone: '',
-            matricule: '',
+            // matricule: '',
             email: '',
             role: '',
             password: '',
@@ -171,7 +171,7 @@ export const UsersTable = () => {
                             <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Prénom</th>
                             <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Nom</th>
                             <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Téléphone</th>
-                            <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Matricule</th>
+                            {/* <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Matricule</th> */}
                             <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Email</th>
                             <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Rôle</th>
                             <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Actions</th>
@@ -185,19 +185,19 @@ export const UsersTable = () => {
                                 } border-b border-gray-200 hover:bg-blue-50 transition-all duration-150`}
                             >
                                 <td className="px-6 py-3 font-medium">{user.id}</td>
-                                <td className="px-6 py-3">{user.first_name}</td>
-                                <td className="px-6 py-3">{user.last_name}</td>
-                                <td className="px-6 py-3">{user.phone}</td>
-                                <td className="px-6 py-3">{user.matricule}</td>
+                                <td className="px-6 py-3">{user.PRENOM_UTILISATEUR}</td>
+                                <td className="px-6 py-3">{user.NOM_UTILISATEUR}</td>
+                                <td className="px-6 py-3">{user.NUMERO_TELEPHONE}</td>
+                                {/* <td className="px-6 py-3">{user.matricule}</td> */}
                                 <td className="px-6 py-3">{user.email}</td>
                                 <td className="px-6 py-3">
                                     <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                                        user.role === 'admin' ? 'bg-purple-100 text-purple-800' : 
-                                        user.role === 'technicien' ? 'bg-blue-100 text-blue-800' : 
+                                        user.ROLE_UTILISATEUR === 'admin' ? 'bg-purple-100 text-purple-800' : 
+                                        user.ROLE_UTILISATEUR === 'technicien' ? 'bg-blue-100 text-blue-800' : 
                                         'bg-green-100 text-green-800'
                                     }`}>
-                                        {user.role === 'admin' ? 'Administrateur' : 
-                                         user.role === 'technicien' ? 'Technicien' : 'Utilisateur'}
+                                        {user.ROLE_UTILISATEUR === 'admin' ? 'Administrateur' : 
+                                         user.ROLE_UTILISATEUR === 'technicien' ? 'Technicien' : 'Utilisateur'}
                                     </span>
                                 </td>
                                 <td className="px-6 py-3">
@@ -277,7 +277,7 @@ export const UsersTable = () => {
                                     required
                                 />
                             </div>
-                            <div>
+                            {/* <div>
                                 <label className="block text-gray-700 text-sm font-bold mb-2">Matricule</label>
                                 <input
                                     type="text"
@@ -287,7 +287,7 @@ export const UsersTable = () => {
                                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                     required
                                 />
-                            </div>
+                            </div> */}
                             <div>
                                 <label className="block text-gray-700 text-sm font-bold mb-2">Email</label>
                                 <input
@@ -395,7 +395,7 @@ export const UsersTable = () => {
                                     required
                                 />
                             </div>
-                            <div>
+                            {/* <div>
                                 <label className="block text-gray-700 text-sm font-bold mb-2">Matricule</label>
                                 <input
                                     type="text"
@@ -405,7 +405,7 @@ export const UsersTable = () => {
                                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                     required
                                 />
-                            </div>
+                            </div> */}
                             <div>
                                 <label className="block text-gray-700 text-sm font-bold mb-2">Email</label>
                                 <input

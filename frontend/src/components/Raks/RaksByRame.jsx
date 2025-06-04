@@ -231,15 +231,7 @@ export const RaksByRame = () => {
                                     >
                                         <td className="px-6 py-3 font-medium">{rak.id}</td>
                                         <td className="px-6 py-3">{rak.NOM_RAK}</td>
-                                        <td className="px-6 py-3">
-                                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                                rak.MOTRICE === 'M' 
-                                                    ? 'bg-blue-100 text-blue-800' 
-                                                    : 'bg-green-100 text-green-800'
-                                            }`}>
-                                                {rak.MOTRICE === 'M' ? 'Motrice' : 'Motrice Haute'}
-                                            </span>
-                                        </td>
+                                        <td className="px-6 py-3"> {rak.MOTRICE}</td>
                                         <td className="px-6 py-3">
                                             <div className="flex space-x-3">
                                                 <button 
