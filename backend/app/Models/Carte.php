@@ -30,4 +30,14 @@ class Carte extends Model
     {
         return $this->hasMany(HistoriqueCarte::class, 'ID_CARTE');
     }
+
+    public function remplacementsAncienne()
+    {
+        return $this->hasMany(RemplacementCarte::class, 'ID_CARTE_ANCIENNE');
+    }
+
+    public function remplacementsNouvelle()
+    {
+        return $this->hasMany(RemplacementCarte::class, 'ID_CARTE_NOUVELLE');
+    }
 }

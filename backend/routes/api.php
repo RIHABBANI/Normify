@@ -11,6 +11,7 @@ use App\Http\Controllers\MaintenanceController;
 use App\Http\Controllers\PanneController;
 use App\Http\Controllers\RameController;
 use App\Http\Controllers\RemplacementCarteController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -108,4 +109,10 @@ Route::prefix('historique-cartes')->group(function () {
     Route::get('/{historiqueCarte}', [App\Http\Controllers\HistoriqueCarteController::class, 'show']);
     Route::put('/{historiqueCarte}', [App\Http\Controllers\HistoriqueCarteController::class, 'update']);
     Route::delete('/{historiqueCarte}', [App\Http\Controllers\HistoriqueCarteController::class, 'destroy']);
+});
+
+// Dashboard routes
+Route::prefix('dashboard')->group(function () {
+    Route::get('/stats', [DashboardController::class, 'getStats']);
+    Route::get('/performance', [DashboardController::class, 'getPerformanceMetrics']);
 });
