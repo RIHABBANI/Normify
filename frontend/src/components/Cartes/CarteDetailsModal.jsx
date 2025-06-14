@@ -78,11 +78,14 @@ export const CarteDetailsModal = ({ isOpen, onClose, carteId }) => {
                                 {carte.STATU_CARTE}
                             </span>
                         </div>
-                        
-                        <div className="grid grid-cols-2 gap-4 mt-4">
+                          <div className="grid grid-cols-2 gap-4 mt-4">
                             <div>
                                 <p className="text-sm text-gray-500">ID</p>
                                 <p className="font-medium">{carte.id}</p>
+                            </div>
+                            <div>
+                                <p className="text-sm text-gray-500">Nom Carte</p>
+                                <p className="font-medium">{carte.NOM_CARTE || 'N/A'}</p>
                             </div>
                             <div>
                                 <p className="text-sm text-gray-500">Rack ID</p>

@@ -25,11 +25,10 @@ class RemplacementCarteController extends Controller
             'OBSERVATIONS' => 'nullable|string',
             'replacement_type' => 'required|in:new,existing',
             'RAISON_REMPLACEMENT' => 'required|string|in:en panne,en maintenance,hors service'
-        ];
-
-        // Add validation rules based on replacement type
+        ];        // Add validation rules based on replacement type
         if ($request->replacement_type === 'new') {
             $validationRules['REFERENCE_CARTE'] = 'required|string|max:225';
+            $validationRules['NOM_CARTE'] = 'nullable|string|max:100';
             $validationRules['STATU_CARTE'] = 'required|string|max:50';
         } else {
             $validationRules['ID_CARTE_NOUVELLE'] = 'required|exists:cartes,id';
@@ -42,12 +41,12 @@ class RemplacementCarteController extends Controller
 
             // Get the old carte to find its RAK
             $oldCarte = Carte::findOrFail($validated['ID_CARTE_ANCIENNE']);
-              $nouvelleCarte = null;
-              if ($validated['replacement_type'] === 'new') {
+              $nouvelleCarte = null;              if ($validated['replacement_type'] === 'new') {
                 // Create the new carte in the same RAK as the old carte
                 $nouvelleCarte = Carte::create([
                     'ID_RAK' => $oldCarte->ID_RAK,
                     'REFERENCE_CARTE' => $validated['REFERENCE_CARTE'],
+                    'NOM_CARTE' => $validated['NOM_CARTE'] ?? null,
                     'STATU_CARTE' => $validated['STATU_CARTE']
                 ]);
             } else {

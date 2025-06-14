@@ -11,18 +11,17 @@ class MaintenanceController extends Controller
 {
     public function index()
     {
-        $maintenances = Maintenance::with(['panne', 'utilisateur'])->get();
+        $maintenances = Maintenance::all();
         return response()->json($maintenances);
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'ID_PANNE' => 'required|exists:pannes,ID_PANNE',
-            'ID_UTILISATEUR' => 'required|exists:utilisateurs,ID_UTILISATEUR',
-            'TYPE_MAINTENANCE' => 'required|string|max:50',
-            'DATE_MAINTENACE' => 'required|date',
-            'TYPE_OPERATION' => 'required|string|max:225'
+            'DATE_MAINTENANCE' => 'required|date',
+            'SIGNALEMENT_MAINTENANCE' => 'required|string|max:1024',
+            'ANOMALIE_MAINTENANCE' => 'required|string|max:1024',
+            'ORGANE_MAINTENANCE' => 'required|string|max:1024',
         ]);
 
         $maintenance = Maintenance::create($validated);
@@ -31,21 +30,20 @@ class MaintenanceController extends Controller
 
     public function show(Maintenance $maintenance)
     {
-        return response()->json($maintenance->load(['panne', 'utilisateur']));
+        return response()->json($maintenance, 200);
     }
 
     public function update(Request $request, Maintenance $maintenance)
     {
         $validated = $request->validate([
-            'ID_PANNE' => 'sometimes|exists:pannes,ID_PANNE',
-            'ID_UTILISATEUR' => 'sometimes|exists:utilisateurs,ID_UTILISATEUR',
-            'TYPE_MAINTENANCE' => 'sometimes|string|max:50',
-            'DATE_MAINTENACE' => 'sometimes|date',
-            'TYPE_OPERATION' => 'sometimes|string|max:225'
+            'DATE_MAINTENANCE' => 'sometimes|date',
+            'SIGNALEMENT_MAINTENANCE' => 'sometimes|string|max:1024',
+            'ANOMALIE_MAINTENANCE' => 'sometimes|string|max:1024',
+            'ORGANE_MAINTENANCE' => 'sometimes|string|max:1024',
         ]);
 
         $maintenance->update($validated);
-        return response()->json($maintenance);
+        return response()->json($maintenance, 200);
     }
 
     public function destroy(Maintenance $maintenance)

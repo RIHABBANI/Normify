@@ -11,11 +11,11 @@ class Intervention extends Model
 
     protected $primaryKey = 'id';
     protected $fillable = [
-        'ID_PANNE',
-        'ID_UTILISATEUR',
         'DATE_INTERVENTION',
-        'ACTION_EFFECTUEE_INTERVENTION',
-        'DUREE_INTERVENTION'
+        'MOTIF',
+        'TRAVAUX',
+        'ID_PANNE',
+        'ID_UTILISATEUR'
     ];
 
     public function panne()
@@ -25,6 +25,6 @@ class Intervention extends Model
 
     public function utilisateur()
     {
-        return $this->belongsTo(Utilisateur::class, 'ID_UTILISATEUR');
+        return $this->belongsTo(User::class, 'ID_UTILISATEUR');
     }
 }

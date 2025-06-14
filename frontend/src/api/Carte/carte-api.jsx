@@ -48,7 +48,9 @@ export const getCarteById = async (carteId) => {
 // Function to add a new Carte
 export const createCarte = async (carteData) => {
     try {
+        console.log('Creating Carte with data:', carteData);
         const response = await API.post('/cartes', carteData);
+        console.log('Carte created:', response.data);
         return response.data;
     } catch (err) {
         if (err.response) {

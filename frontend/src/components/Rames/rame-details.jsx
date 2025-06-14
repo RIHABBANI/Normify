@@ -13,6 +13,7 @@ export const RameDetails = () => {
     const [showAddModal, setShowAddModal] = useState(false);    const [formData, setFormData] = useState({
         ID_CARTE_ANCIENNE: '',
         REFERENCE_CARTE: '',
+        NOM_CARTE: '',
         STATU_CARTE: 'fonctionnel',
         DATE_REMPLACEMENT: new Date().toISOString().split('T')[0],
         OBSERVATIONS: '',
@@ -106,11 +107,11 @@ export const RameDetails = () => {
             
             // Refresh the replacement data
             const updatedReplacements = await getRemplacementsByRame(rameId);
-            setRemplacements(updatedReplacements);
-              // Reset form
+            setRemplacements(updatedReplacements);            // Reset form
             setFormData({
                 ID_CARTE_ANCIENNE: '',
                 REFERENCE_CARTE: '',
+                NOM_CARTE: '',
                 STATU_CARTE: 'fonctionnel',
                 DATE_REMPLACEMENT: new Date().toISOString().split('T')[0],
                 OBSERVATIONS: '',
@@ -150,6 +151,7 @@ export const RameDetails = () => {
             OBSERVATIONS: '',
             replacement_type: 'new',
             REFERENCE_CARTE: '',
+            NOM_CARTE: '',
             STATU_CARTE: 'fonctionnel',
             selected_rak_id: '',
             RAISON_REMPLACEMENT: ''
@@ -317,6 +319,7 @@ export const RameDetails = () => {
                                         <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Carte Remplacée</th>
                                         <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Nouvelle Carte</th>
                                         <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Rack</th>
+                                        <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Motrice</th>
                                         <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Observations</th>
                                     </tr>
                                 </thead>
@@ -339,6 +342,9 @@ export const RameDetails = () => {
                                             </td>
                                             <td className="px-6 py-3">
                                                 {remplacement.carte_ancienne.rak.NOM_RAK || 'N/A'}
+                                            </td>
+                                            <td className="px-6 py-3">
+                                                {remplacement.carte_ancienne.rak.MOTRICE || 'N/A'}
                                             </td>
                                             <td className="px-6 py-3">
                                                 {remplacement.OBSERVATIONS || 'Aucune observation'}
@@ -534,8 +540,7 @@ export const RameDetails = () => {
                                         <p className="text-sm text-blue-700">
                                             <strong>Info:</strong> La nouvelle carte sera créée dans le même rack que la carte remplacée.
                                         </p>
-                                    </div>
-                                    <div>
+                                    </div>                                    <div>
                                         <label className="block text-gray-700 text-sm font-bold mb-2">Référence de la nouvelle carte</label>
                                         <input
                                             type="text"
@@ -545,6 +550,17 @@ export const RameDetails = () => {
                                             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                             placeholder="Entrez la référence de la nouvelle carte"
                                             required={formData.replacement_type === 'new'}
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-gray-700 text-sm font-bold mb-2">Nom de la nouvelle carte</label>
+                                        <input
+                                            type="text"
+                                            name="NOM_CARTE"
+                                            value={formData.NOM_CARTE}
+                                            onChange={handleInputChange}
+                                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                            placeholder="Nom optionnel de la nouvelle carte"
                                         />
                                     </div>
                                     <div>

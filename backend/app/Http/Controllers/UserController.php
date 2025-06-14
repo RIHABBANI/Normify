@@ -22,7 +22,7 @@ class UserController extends Controller
             'NUMERO_TELEPHONE' => 'required|string|max:50',
             'password' => 'required|string|max:225',
             'ROLE_UTILISATEUR' => 'required|string|max:225',
-            'email' => 'required|email|max:255|unique:users,NOM_UTILISATEUR',
+            'email' => 'required|email|max:255|unique:users,email',
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
@@ -31,12 +31,12 @@ class UserController extends Controller
         return response()->json($User, 201);
     }
 
-    public function show(User $User)
+    public function show(User $utilisateur)
     {
-        return response()->json($User->load('interventions', 'maintenances'));
+        return response()->json($utilisateur->load('interventions', 'maintenances'));
     }
 
-    public function update(Request $request, User $User)
+    public function update(Request $request, User $utilisateur)
     {
         $validated = $request->validate([
             'NOM_UTILISATEUR' => 'sometimes|string|max:50',
@@ -44,20 +44,20 @@ class UserController extends Controller
             'NUMERO_TELEPHONE' => 'sometimes|string|max:50',
             'password' => 'sometimes|string|max:225',
             'ROLE_UTILISATEUR' => 'sometimes|string|max:225',
-            'email' => 'sometimes|email|max:255|unique:users,NOM_UTILISATEUR,' . $User->id
+            'email' => 'sometimes|email|max:255|unique:users,email,' . $utilisateur->id
         ]);
 
         if (isset($validated['password'])) {
             $validated['password'] = Hash::make($validated['password']);
         }
 
-        $User->update($validated);
-        return response()->json($User);
+        $utilisateur->update($validated);
+        return response()->json($utilisateur);
     }
 
-    public function destroy(User $User)
+    public function destroy(User $utilisateur)
     {
-        $User->delete();
+        $utilisateur->delete();
         return response()->json(null, 204);
     }
 

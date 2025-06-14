@@ -15,10 +15,10 @@ export const CarteDetails = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [raks, setRaks] = useState([]);
-    
-    const [formData, setFormData] = useState({
+      const [formData, setFormData] = useState({
         ID_RAK: '',
         REFERENCE_CARTE: '',
+        NOM_CARTE: '',
         STATU_CARTE: ''
     });
       const statusOptions = [
@@ -37,11 +37,11 @@ export const CarteDetails = () => {
                 // Fetch carte data
                 const carteData = await getCarteById(carteId);
                 setCarte(carteData);
-                
-                // Initialize form data with carte details
+                  // Initialize form data with carte details
                 setFormData({
                     ID_RAK: carteData.ID_RAK,
                     REFERENCE_CARTE: carteData.REFERENCE_CARTE,
+                    NOM_CARTE: carteData.NOM_CARTE || '',
                     STATU_CARTE: carteData.STATU_CARTE
                 });
                 
@@ -104,11 +104,11 @@ export const CarteDetails = () => {
         }
     };
 
-    const handleCancel = () => {
-        // Reset form data to original carte values
+    const handleCancel = () => {        // Reset form data to original carte values
         setFormData({
             ID_RAK: carte.ID_RAK,
             REFERENCE_CARTE: carte.REFERENCE_CARTE,
+            NOM_CARTE: carte.NOM_CARTE || '',
             STATU_CARTE: carte.STATU_CARTE
         });
         setIsEditing(false);
@@ -204,8 +204,7 @@ export const CarteDetails = () => {
                             <p className="text-red-600">{error}</p>
                         </div>
                     )}                    <form>
-                        <div className="grid grid-cols-1 align-center md:grid-cols-4 gap-6 mt-6">
-                            <div>
+                        <div className="grid grid-cols-1 align-center md:grid-cols-4 gap-6 mt-6">                            <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">
                                     Référence Carte
                                 </label>
@@ -219,6 +218,24 @@ export const CarteDetails = () => {
                                     />
                                 ) : (
                                     <p className="text-lg">{carte.REFERENCE_CARTE}</p>
+                                )}
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    Nom Carte
+                                </label>
+                                {isEditing ? (
+                                    <input
+                                        type="text"
+                                        name="NOM_CARTE"
+                                        value={formData.NOM_CARTE}
+                                        onChange={handleInputChange}
+                                        placeholder="Nom optionnel de la carte"
+                                        className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    />
+                                ) : (
+                                    <p className="text-lg">{carte.NOM_CARTE || 'N/A'}</p>
                                 )}
                             </div>
                             

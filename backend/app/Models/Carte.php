@@ -13,6 +13,7 @@ class Carte extends Model
     protected $fillable = [
         'ID_RAK',
         'REFERENCE_CARTE',
+        'NOM_CARTE',
         'STATU_CARTE'
     ];
 

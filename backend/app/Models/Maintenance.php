@@ -11,20 +11,10 @@ class Maintenance extends Model
 
     protected $primaryKey = 'id';
     protected $fillable = [
-        'ID_PANNE',
-        'ID_UTILISATEUR',
-        'TYPE_MAINTENANCE',
-        'DATE_MAINTENACE',
-        'TYPE_OPERATION'
+        'DATE_MAINTENANCE',
+        'SIGNALEMENT_MAINTENANCE',
+        'ANOMALIE_MAINTENANCE',
+        'ORGANE_MAINTENANCE',
     ];
 
-    public function panne()
-    {
-        return $this->belongsTo(Panne::class, 'ID_PANNE');
-    }
-
-    public function utilisateur()
-    {
-        return $this->belongsTo(Utilisateur::class, 'ID_UTILISATEUR');
-    }
 }

@@ -41,10 +41,10 @@ Route::prefix('utilisateurs')->group(function () {
 });
 
 Route::prefix('cartes')->group(function () {
+    Route::post('/', [CarteController::class, 'store']);
     Route::get('/', [CarteController::class, 'index']);
     Route::get('/raks/{rak}', [CarteController::class, 'showByRak']);
     Route::get('/rame/{rameId}', [CarteController::class, 'showByRame']);
-    Route::post('/', [CarteController::class, 'store']);
     Route::get('/{carte}', [CarteController::class, 'show']);
     Route::put('/{carte}', [CarteController::class, 'update']);
     Route::delete('/{carte}', [CarteController::class, 'destroy']);
@@ -75,9 +75,9 @@ Route::prefix('pannes')->group(function () {
 });
 
 Route::prefix('raks')->group(function () {
+    Route::post('/', [RakController::class, 'store']);
     Route::get('/', [RakController::class, 'index']);
     Route::get('/rames/{rame}', [RakController::class, 'showByRame']);
-    Route::post('/', [RakController::class, 'store']);
     Route::get('/{rak}', [RakController::class, 'show']);
     Route::put('/{rak}', [RakController::class, 'update']);
     Route::delete('/{rak}', [RakController::class, 'destroy']);

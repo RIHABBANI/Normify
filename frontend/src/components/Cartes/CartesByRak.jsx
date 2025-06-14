@@ -10,9 +10,9 @@ export const CartesByRak = () => {
     const [showAddModal, setShowAddModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
-    const [selectedCarte, setSelectedCarte] = useState(null);
-    const [formData, setFormData] = useState({
+    const [selectedCarte, setSelectedCarte] = useState(null);    const [formData, setFormData] = useState({
         REFERENCE_CARTE: '',
+        NOM_CARTE: '',
         STATU_CARTE: 'Fonctionnel',
         ID_RAK: ''
     });
@@ -42,11 +42,10 @@ export const CartesByRak = () => {
             ...formData,
             [name]: value
         });
-    };
-
-    const resetForm = () => {
+    };    const resetForm = () => {
         setFormData({
             REFERENCE_CARTE: '',
+            NOM_CARTE: '',
             STATU_CARTE: 'Fonctionnel',
             ID_RAK: rakId
         });
@@ -58,13 +57,12 @@ export const CartesByRak = () => {
         resetForm();
         setFormData(prev => ({ ...prev, ID_RAK: rakId }));
         setShowAddModal(true);
-    };
-
-    const openEditModal = (carte, e) => {
+    };    const openEditModal = (carte, e) => {
         e.stopPropagation();
         setSelectedCarte(carte);
         setFormData({
             REFERENCE_CARTE: carte.REFERENCE_CARTE || '',
+            NOM_CARTE: carte.NOM_CARTE || '',
             STATU_CARTE: carte.STATU_CARTE || 'Fonctionnel',
             ID_RAK: rakId
         });
@@ -218,9 +216,9 @@ export const CartesByRak = () => {
                                             className="w-4 h-4 text-blue-500 bg-white rounded focus:ring-2 focus:ring-blue-400"
                                         />
                                     </div>
-                                </th>
-                                <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">ID</th>
+                                </th>                                <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">ID</th>
                                 <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Référence</th>
+                                <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Nom Carte</th>
                                 <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Statut</th>
                                 <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Actions</th>
                             </tr>
@@ -241,9 +239,9 @@ export const CartesByRak = () => {
                                                 className="w-4 h-4 text-blue-500 bg-gray-200 rounded focus:ring-2 focus:ring-blue-400"
                                             />
                                         </div>
-                                    </td>
-                                    <td className="px-6 py-3 font-medium">{carte.id}</td>
-                                    <td className="px-6 py-3">{carte.REFERENCE_CARTE}</td>                                    <td className="px-6 py-3">
+                                    </td>                                    <td className="px-6 py-3 font-medium">{carte.id}</td>
+                                    <td className="px-6 py-3">{carte.REFERENCE_CARTE}</td>
+                                    <td className="px-6 py-3">{carte.NOM_CARTE || 'N/A'}</td><td className="px-6 py-3">
                                         <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border-2 ${
                                             carte.STATU_CARTE === 'Fonctionnel' 
                                                 ? 'bg-green-100 text-green-800 border-green-300' 
@@ -316,8 +314,7 @@ export const CartesByRak = () => {
             {showAddModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-                        <h2 className="text-xl font-bold mb-4">Ajouter une nouvelle carte</h2>
-                        <form onSubmit={handleAddCarte}>
+                        <h2 className="text-xl font-bold mb-4">Ajouter une nouvelle carte</h2>                        <form onSubmit={handleAddCarte}>
                             <div className="mb-4">
                                 <label className="block text-sm font-medium mb-2">Référence Carte</label>
                                 <input
@@ -327,6 +324,17 @@ export const CartesByRak = () => {
                                     onChange={handleInputChange}
                                     className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-400"
                                     required
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium mb-2">Nom de la carte</label>
+                                <input
+                                    type="text"
+                                    name="NOM_CARTE"
+                                    value={formData.NOM_CARTE}
+                                    onChange={handleInputChange}
+                                    placeholder="Nom optionnel de la carte"
+                                    className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-400"
                                 />
                             </div>
                             <div className="mb-4">
@@ -369,8 +377,7 @@ export const CartesByRak = () => {
             {showEditModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-                        <h2 className="text-xl font-bold mb-4">Modifier la carte</h2>
-                        <form onSubmit={handleEditCarte}>
+                        <h2 className="text-xl font-bold mb-4">Modifier la carte</h2>                        <form onSubmit={handleEditCarte}>
                             <div className="mb-4">
                                 <label className="block text-sm font-medium mb-2">Référence Carte</label>
                                 <input
@@ -380,6 +387,17 @@ export const CartesByRak = () => {
                                     onChange={handleInputChange}
                                     className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-400"
                                     required
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium mb-2">Nom de la carte</label>
+                                <input
+                                    type="text"
+                                    name="NOM_CARTE"
+                                    value={formData.NOM_CARTE}
+                                    onChange={handleInputChange}
+                                    placeholder="Nom optionnel de la carte"
+                                    className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-400"
                                 />
                             </div>
                             <div className="mb-4">

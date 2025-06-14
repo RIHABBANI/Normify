@@ -30,9 +30,9 @@ export const Login = () => {
         localStorage.setItem('authData', authData);
         localStorage.setItem('token', token);
         
-        console.log('Login jkhjhkhk:', response.user);
+        // console.log('Login jkhjhkhk:', response.user);
 
-        Navigate('/dashboard');
+        Navigate('/');
       }
 
       setError(response.message);

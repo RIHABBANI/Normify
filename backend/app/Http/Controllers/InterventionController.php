@@ -11,18 +11,17 @@ class InterventionController extends Controller
 {
     public function index()
     {
-        $interventions = Intervention::with(['panne', 'utilisateur'])->get();
+        $interventions = Intervention::all();
         return response()->json($interventions);
+        
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'ID_PANNE' => 'required|exists:pannes,ID_PANNE',
-            'ID_UTILISATEUR' => 'required|exists:utilisateurs,ID_UTILISATEUR',
             'DATE_INTERVENTION' => 'required|date',
-            'ACTION_EFFECTUEE_INTERVENTION' => 'required|string|max:225',
-            'DUREE_INTERVENTION' => 'required|integer'
+            'MOTIF' => 'required|string|max:255',
+            'TRAVAUX' => 'required|string'
         ]);
 
         $intervention = Intervention::create($validated);
@@ -31,17 +30,15 @@ class InterventionController extends Controller
 
     public function show(Intervention $intervention)
     {
-        return response()->json($intervention->load(['panne', 'utilisateur']));
+        return response()->json($intervention);
     }
 
     public function update(Request $request, Intervention $intervention)
     {
         $validated = $request->validate([
-            'ID_PANNE' => 'sometimes|exists:pannes,ID_PANNE',
-            'ID_UTILISATEUR' => 'sometimes|exists:utilisateurs,ID_UTILISATEUR',
             'DATE_INTERVENTION' => 'sometimes|date',
-            'ACTION_EFFECTUEE_INTERVENTION' => 'sometimes|string|max:225',
-            'DUREE_INTERVENTION' => 'sometimes|integer'
+            'MOTIF' => 'sometimes|string|max:255',
+            'TRAVAUX' => 'sometimes|string'
         ]);
 
         $intervention->update($validated);

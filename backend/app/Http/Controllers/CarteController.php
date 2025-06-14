@@ -20,6 +20,7 @@ class CarteController extends Controller
         $validated = $request->validate([
             'ID_RAK' => 'required|exists:raks,id',
             'REFERENCE_CARTE' => 'required|string|max:225',
+            'NOM_CARTE' => 'nullable|string|max:100',
             'STATU_CARTE' => 'required|string|max:50'
         ]);
 
@@ -76,6 +77,7 @@ class CarteController extends Controller
         $validated = $request->validate([
             'ID_RAK' => 'sometimes|exists:raks,id',
             'REFERENCE_CARTE' => 'sometimes|string|max:225',
+            'NOM_CARTE' => 'sometimes|nullable|string|max:100',
             'STATU_CARTE' => 'sometimes|string|max:50'
         ]);
 
