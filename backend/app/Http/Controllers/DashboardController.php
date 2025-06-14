@@ -150,9 +150,7 @@ class DashboardController extends Controller
                 GROUP BY YEAR(DATE_REMPLACEMENT), MONTH(DATE_REMPLACEMENT)
                 ORDER BY year DESC, month DESC
                 LIMIT 12
-            ", [$startDate, $endDate]);
-
-            // Get rak status distribution (based on their cartes)
+            ", [$startDate, $endDate]);            // Get rak status distribution (based on their cartes)
             $rakStatusStats = DB::select("
                 SELECT 
                     r.id,
@@ -166,7 +164,18 @@ class DashboardController extends Controller
                 FROM raks r
                 LEFT JOIN cartes c ON r.id = c.ID_RAK
                 GROUP BY r.id, r.NOM_RAK, r.MOTRICE
-            ");            return response()->json([
+            ");
+
+            // Get replacements by technical cause (filtered by date range)
+            $replacementsByCause = DB::select("
+                SELECT 
+                    COALESCE(CAUSE_REMPLACEMENT, 'Non spécifiée') as CAUSE_REMPLACEMENT,
+                    COUNT(*) as count
+                FROM remplacement_cartes
+                WHERE DATE_REMPLACEMENT BETWEEN ? AND ?
+                GROUP BY CAUSE_REMPLACEMENT
+                ORDER BY count DESC
+            ", [$startDate, $endDate]);            return response()->json([
                 'overview' => [
                     'total_rames' => $totalRames,
                     'total_raks' => $totalRaks,
@@ -183,6 +192,7 @@ class DashboardController extends Controller
                 'motrice_distribution' => $motriceDistribution,
                 'monthly_replacements' => $monthlyReplacements,
                 'rak_status_stats' => $rakStatusStats,
+                'replacements_by_cause' => $replacementsByCause,
                 'date_filters' => [
                     'start_date' => $startDate,
                     'end_date' => $endDate

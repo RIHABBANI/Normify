@@ -20,7 +20,8 @@ export const RameDetails = () => {
         replacement_type: 'new', // 'new' or 'existing'
         ID_CARTE_NOUVELLE: '',
         selected_rak_id: '',
-        RAISON_REMPLACEMENT: '' // Reason why the old carte is being replaced
+        RAISON_REMPLACEMENT: '', // Reason why the old carte is being replaced
+        CAUSE_REMPLACEMENT: '' // Technical cause of the replacement
     });
     const [availableCartes, setAvailableCartes] = useState([]);
     const [availableRaks, setAvailableRaks] = useState([]);
@@ -74,9 +75,7 @@ export const RameDetails = () => {
         // If the selected RAK changes, fetch cartes for that RAK
         if (name === 'selected_rak_id' && value) {
             fetchCartesByRak(value);
-        }
-
-        // Reset carte selection when switching replacement types
+        }        // Reset carte selection when switching replacement types
         if (name === 'replacement_type') {
             setFormData(prev => ({
                 ...prev,
@@ -118,7 +117,8 @@ export const RameDetails = () => {
                 replacement_type: 'new',
                 ID_CARTE_NOUVELLE: '',
                 selected_rak_id: '',
-                RAISON_REMPLACEMENT: ''
+                RAISON_REMPLACEMENT: '',
+                CAUSE_REMPLACEMENT: ''
             });
             setRakCartes([]);
         } catch (err) {
@@ -143,8 +143,7 @@ export const RameDetails = () => {
     const handleOpenAddModal = () => {
         setShowAddModal(true);
     };    const handleCloseAddModal = () => {
-        setShowAddModal(false);
-        setFormData({
+        setShowAddModal(false);        setFormData({
             ID_CARTE_ANCIENNE: '',
             ID_CARTE_NOUVELLE: '',
             DATE_REMPLACEMENT: new Date().toISOString().split('T')[0],
@@ -154,7 +153,8 @@ export const RameDetails = () => {
             NOM_CARTE: '',
             STATU_CARTE: 'fonctionnel',
             selected_rak_id: '',
-            RAISON_REMPLACEMENT: ''
+            RAISON_REMPLACEMENT: '',
+            CAUSE_REMPLACEMENT: ''
         });
         setRakCartes([]);
         setSuccess('');
@@ -312,14 +312,13 @@ export const RameDetails = () => {
                             </button>
                         </div>
                     ) : (                        <div className="relative overflow-x-auto rounded-lg border border-gray-200">
-                            <table className="w-full text-sm text-left text-gray-900 bg-white">
-                                <thead className="text-xs uppercase bg-gray-100 border-b border-gray-200">
+                            <table className="w-full text-sm text-left text-gray-900 bg-white">                                <thead className="text-xs uppercase bg-gray-100 border-b border-gray-200">
                                     <tr>
                                         <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Date</th>
                                         <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Carte Remplacée</th>
                                         <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Nouvelle Carte</th>
                                         <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Rack</th>
-                                        <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Motrice</th>
+                                        <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Cause Technique</th>
                                         <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Observations</th>
                                     </tr>
                                 </thead>
@@ -333,8 +332,7 @@ export const RameDetails = () => {
                                         >
                                             <td className="px-6 py-3">
                                                 {formatDate(remplacement.DATE_REMPLACEMENT)}
-                                            </td>
-                                            <td className="px-6 py-3">
+                                            </td>                                            <td className="px-6 py-3">
                                                 {remplacement.carte_ancienne.REFERENCE_CARTE || 'N/A'}
                                             </td>
                                             <td className="px-6 py-3">
@@ -344,7 +342,11 @@ export const RameDetails = () => {
                                                 {remplacement.carte_ancienne.rak.NOM_RAK || 'N/A'}
                                             </td>
                                             <td className="px-6 py-3">
-                                                {remplacement.carte_ancienne.rak.MOTRICE || 'N/A'}
+                                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                                    remplacement.CAUSE_REMPLACEMENT ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-600'
+                                                }`}>
+                                                    {remplacement.CAUSE_REMPLACEMENT || 'Non spécifiée'}
+                                                </span>
                                             </td>
                                             <td className="px-6 py-3">
                                                 {remplacement.OBSERVATIONS || 'Aucune observation'}
@@ -478,15 +480,17 @@ export const RameDetails = () => {
                                     required
                                 >
                                     <option value="">Sélectionner une carte</option>
-                                    {availableCartes.map(carte => (
+                                    {availableCartes
+                                        .filter(carte => carte.STATU_CARTE === 'fonctionnel')
+                                        .map(carte => (
                                         <option key={carte.id} value={carte.id}>
                                             {carte.REFERENCE_CARTE} (Rack: {carte.rak?.NOM_RAK || 'N/A'})
                                         </option>
                                     ))}
                                 </select>
-                            </div>                            {/* Replacement Reason */}
+                            </div>{/* Replacement Reason */}
                             <div>
-                                <label className="block text-gray-700 text-sm font-bold mb-2">Raison du remplacement (statut actuel de la carte défaillante)</label>
+                                <label className="block text-gray-700 text-sm font-bold mb-2">Raison du remplacement</label>
                                 <select
                                     name="RAISON_REMPLACEMENT"
                                     value={formData.RAISON_REMPLACEMENT}
@@ -499,8 +503,31 @@ export const RameDetails = () => {
                                     <option value="en maintenance">En maintenance</option>
                                     <option value="hors service">Hors service</option>
                                 </select>
+                            </div>
+
+                            {/* Technical Cause of Replacement */}
+                            <div>
+                                <label className="block text-gray-700 text-sm font-bold mb-2">Cause technique du remplacement</label>
+                                <select
+                                    name="CAUSE_REMPLACEMENT"
+                                    value={formData.CAUSE_REMPLACEMENT}
+                                    onChange={handleInputChange}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                >
+                                    <option value="">Sélectionner la cause technique</option>
+                                    <option value="Surtension / polarité inversée">Surtension / polarité inversée</option>
+                                    <option value="Mémoire Flash défectueuse">Mémoire Flash défectueuse</option>
+                                    <option value="RAM défectueuse">RAM défectueuse</option>
+                                    <option value="Port RS232 / TTL HS">Port RS232 / TTL HS</option>
+                                    <option value="MVBC défaillant">MVBC défaillant</option>
+                                    <option value="Firmware corrompu">Firmware corrompu</option>
+                                    <option value="Relais défectueux">Relais défectueux</option>
+                                    <option value="Court-circuit mal géré">Court-circuit mal géré</option>
+                                    <option value="ESD sur entrées">ESD sur entrées</option>
+                                    <option value="Usure / oxydation">Usure / oxydation</option>
+                                </select>
                                 <p className="text-xs text-gray-500 mt-1">
-                                    Après le remplacement, l'ancienne carte sera automatiquement marquée comme "hors service"
+                                    Sélectionnez la cause technique spécifique du défaut de la carte
                                 </p>
                             </div>
 
@@ -560,23 +587,23 @@ export const RameDetails = () => {
                                             value={formData.NOM_CARTE}
                                             onChange={handleInputChange}
                                             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                            placeholder="Nom optionnel de la nouvelle carte"
+                                            placeholder="Nom de la nouvelle carte"
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-gray-700 text-sm font-bold mb-2">Statut de la nouvelle carte</label>
-                                        <select
+                                        <label className="block text-gray-700 text-sm font-bold mb-2">Statut de la nouvelle carte</label>                                        <select
                                             name="STATU_CARTE"
                                             value={formData.STATU_CARTE}
                                             onChange={handleInputChange}
                                             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                             required={formData.replacement_type === 'new'}
+                                            disabled
                                         >
                                             <option value="fonctionnel">Fonctionnel</option>
-                                            <option value="en panne">En panne</option>
-                                            <option value="en maintenance">En maintenance</option>
-                                            <option value="hors service">Hors service</option>
                                         </select>
+                                        <p className="text-xs text-gray-500 mt-1">
+                                            Le statut des nouvelles cartes est automatiquement défini à "Fonctionnel"
+                                        </p>
                                     </div>
                                 </>
                             )}
@@ -604,8 +631,7 @@ export const RameDetails = () => {
                                     
                                     {formData.selected_rak_id && (
                                         <div>
-                                            <label className="block text-gray-700 text-sm font-bold mb-2">Carte existante</label>
-                                            <select
+                                            <label className="block text-gray-700 text-sm font-bold mb-2">Carte existante</label>                                            <select
                                                 name="ID_CARTE_NOUVELLE"
                                                 value={formData.ID_CARTE_NOUVELLE}
                                                 onChange={handleInputChange}
@@ -613,15 +639,16 @@ export const RameDetails = () => {
                                                 required={formData.replacement_type === 'existing'}
                                             >
                                                 <option value="">Sélectionner une carte</option>
-                                                {rakCartes.map(carte => (
+                                                {rakCartes
+                                                    .filter(carte => carte.STATU_CARTE !== 'fonctionnel')
+                                                    .map(carte => (
                                                     <option key={carte.id} value={carte.id}>
                                                         {carte.REFERENCE_CARTE} ({carte.STATU_CARTE})
                                                     </option>
                                                 ))}
-                                            </select>
-                                            {rakCartes.length === 0 && formData.selected_rak_id && (
+                                            </select>                                            {rakCartes.filter(carte => carte.STATU_CARTE !== 'fonctionnel').length === 0 && formData.selected_rak_id && (
                                                 <p className="text-sm text-yellow-600 mt-1">
-                                                    Aucune carte disponible dans ce rack.
+                                                    Aucune carte non-fonctionnelle disponible dans ce rack.
                                                 </p>
                                             )}
                                         </div>

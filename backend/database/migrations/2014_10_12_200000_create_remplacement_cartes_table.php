@@ -13,6 +13,7 @@ return new class extends Migration
             $table->unsignedBigInteger('ID_CARTE_ANCIENNE');
             $table->unsignedBigInteger('ID_CARTE_NOUVELLE');
             $table->date('DATE_REMPLACEMENT');
+            $table->string('CAUSE_REMPLACEMENT', 100);
             $table->text('OBSERVATIONS')->nullable();
             $table->timestamps();
 

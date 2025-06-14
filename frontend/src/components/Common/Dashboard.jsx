@@ -16,7 +16,7 @@ import {
   CpuChipIcon,
   WrenchScrewdriverIcon
 } from "@heroicons/react/24/outline";
-import { getDashboardStats, getPerformanceMetrics } from '../../api/Dashboard/dashboard-api';
+import { getDashboardStats, getPerformanceMetrics } from '../../api/Dashboard/dashboard-api.jsx';
 
 export default function Dashboard() {
   const [stats, setStats] = useState(null);
@@ -320,6 +320,88 @@ export default function Dashboard() {
           }
         },
         tooltip: { theme: "light" }
+      }
+    };
+  };
+
+  const getReplacementsByCauseChart = () => {
+    if (!stats?.replacements_by_cause) return null;
+
+    const causeData = stats.replacements_by_cause;
+    const series = causeData.map(item => item.count);
+    const labels = causeData.map(item => item.CAUSE_REMPLACEMENT || 'Non spécifiée');
+
+    // Generate a color palette for the causes
+    const colors = [
+      "#EF4444", // Red
+      "#F59E0B", // Orange
+      "#10B981", // Green  
+      "#3B82F6", // Blue
+      "#8B5CF6", // Purple
+      "#EC4899", // Pink
+      "#06B6D4", // Cyan
+      "#84CC16", // Lime
+      "#F97316", // Orange-600
+      "#6366F1", // Indigo
+      "#14B8A6"  // Teal
+    ];
+
+    return {
+      type: "bar",
+      height: 350,
+      series: [{
+        name: "Remplacements",
+        data: series
+      }],
+      options: {
+        chart: { 
+          toolbar: { show: false },
+          type: 'bar'
+        },
+        colors: colors.slice(0, series.length),
+        plotOptions: {
+          bar: {
+            horizontal: true,
+            columnWidth: '70%',
+            endingShape: 'rounded'
+          }
+        },
+        dataLabels: {
+          enabled: true,
+          style: {
+            colors: ['#fff'],
+            fontSize: '12px',
+            fontWeight: 'bold'
+          }
+        },
+        xaxis: {
+          categories: labels,
+          labels: {
+            style: { colors: "#616161", fontSize: "11px" }
+          }
+        },
+        yaxis: {
+          title: {
+            text: 'Causes Techniques'
+          },
+          labels: {
+            style: { colors: "#616161", fontSize: "11px" },
+            maxWidth: 200
+          }
+        },
+        grid: {
+          show: true,
+          borderColor: "#E5E7EB",
+          strokeDashArray: 3
+        },
+        tooltip: {
+          theme: "light",
+          y: {
+            formatter: function (val) {
+              return val + " remplacements"
+            }
+          }
+        }
       }
     };
   };
@@ -731,6 +813,29 @@ export default function Dashboard() {
           </CardBody>
         </Card>
       )} */}
+      {/* Replacement by Cause Chart */}
+      <div className="grid grid-cols-1 gap-6">
+        <Card>
+          <CardHeader
+            floated={false}
+            shadow={false}
+            color="transparent"
+            className="flex flex-col gap-4 rounded-none md:flex-row md:items-center"
+          >
+            <div className="w-max rounded-lg bg-red-500 p-2 text-white">
+              <ExclamationTriangleIcon className="h-6 w-6" />
+            </div>
+            <div>
+              <Typography variant="h6" color="blue-gray">
+                Remplacements par Cause Technique (Période Sélectionnée)
+              </Typography>
+            </div>
+          </CardHeader>
+          <CardBody className="px-2 pb-0">
+            {getReplacementsByCauseChart() && <Chart {...getReplacementsByCauseChart()} />}
+          </CardBody>
+        </Card>
+      </div>
     </div>
   );
 }

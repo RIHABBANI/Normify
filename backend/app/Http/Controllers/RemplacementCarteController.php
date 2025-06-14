@@ -17,15 +17,15 @@ class RemplacementCarteController extends Controller
         $remplacements = RemplacementCarte::with(['carteAncienne', 'carteNouvelle'])->get();
         return response()->json($remplacements);
     }    public function store(Request $request)
-    {
-        // Validate main fields
+    {        // Validate main fields
         $validationRules = [
             'ID_CARTE_ANCIENNE' => 'required|exists:cartes,id',
             'DATE_REMPLACEMENT' => 'required|date',
             'OBSERVATIONS' => 'nullable|string',
             'replacement_type' => 'required|in:new,existing',
-            'RAISON_REMPLACEMENT' => 'required|string|in:en panne,en maintenance,hors service'
-        ];        // Add validation rules based on replacement type
+            'RAISON_REMPLACEMENT' => 'required|string|in:en panne,en maintenance,hors service',
+            'CAUSE_REMPLACEMENT' => 'nullable|string|max:100'
+        ];// Add validation rules based on replacement type
         if ($request->replacement_type === 'new') {
             $validationRules['REFERENCE_CARTE'] = 'required|string|max:225';
             $validationRules['NOM_CARTE'] = 'nullable|string|max:100';
@@ -73,12 +73,12 @@ class RemplacementCarteController extends Controller
             } else {
                 $observations = "Raison: " . $validated['RAISON_REMPLACEMENT'];
             }
-            
-            $remplacement = RemplacementCarte::create([
+              $remplacement = RemplacementCarte::create([
                 'ID_CARTE_ANCIENNE' => $validated['ID_CARTE_ANCIENNE'],
                 'ID_CARTE_NOUVELLE' => $nouvelleCarte->id,
                 'DATE_REMPLACEMENT' => $validated['DATE_REMPLACEMENT'],
-                'OBSERVATIONS' => $observations
+                'OBSERVATIONS' => $observations,
+                'CAUSE_REMPLACEMENT' => $validated['CAUSE_REMPLACEMENT'] ?? null
             ]);
 
             // Create historique_carte entries

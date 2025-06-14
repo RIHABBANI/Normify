@@ -15,7 +15,8 @@ class RemplacementCarte extends Model
         'ID_CARTE_ANCIENNE',
         'ID_CARTE_NOUVELLE',
         'DATE_REMPLACEMENT',
-        'OBSERVATIONS'
+        'OBSERVATIONS',
+        'CAUSE_REMPLACEMENT'
     ];
 
     public function carteAncienne()
