@@ -41,30 +41,22 @@ class DashboardController extends Controller
                     WHERE DATE_REMPLACEMENT BETWEEN ? AND ?
                 )
                 OR c.updated_at BETWEEN ? AND ?
-            ", [$startDate, $endDate, $startDate, $endDate, $startDate, $endDate])->count;// Get carte status distribution (for cartes that had activity in the date range)
+            ", [$startDate, $endDate, $startDate, $endDate, $startDate, $endDate])->count;            // Get carte status distribution (current status of all cartes, not filtered by activity)
             $carteStatusDistribution = DB::select("
                 SELECT 
                     c.STATU_CARTE,
                     COUNT(*) as count
                 FROM cartes c
-                WHERE c.id IN (
-                    SELECT DISTINCT ID_CARTE_ANCIENNE FROM remplacement_cartes 
-                    WHERE DATE_REMPLACEMENT BETWEEN ? AND ?
-                    UNION
-                    SELECT DISTINCT ID_CARTE_NOUVELLE FROM remplacement_cartes 
-                    WHERE DATE_REMPLACEMENT BETWEEN ? AND ?
-                )
-                OR c.updated_at BETWEEN ? AND ?
                 GROUP BY c.STATU_CARTE
-            ", [$startDate, $endDate, $startDate, $endDate, $startDate, $endDate]);
+            ");
 
             // Convert to collection and key by status
             $carteStatusDistribution = collect($carteStatusDistribution)->keyBy('STATU_CARTE');
 
-            // Calculate operational efficiency based on filtered data
-            $fonctionnelCount = $carteStatusDistribution->get('Fonctionnel')->count ?? 0;
-            $totalFilteredCartes = $carteStatusDistribution->sum('count');
-            $operationalEfficiency = $totalFilteredCartes > 0 ? round(($fonctionnelCount / $totalFilteredCartes) * 100, 2) : 0;
+            // Calculate operational efficiency based on all cartes
+            $fonctionnelCount = $carteStatusDistribution->get('fonctionnel')->count ?? 0;
+            $totalCartes = $carteStatusDistribution->sum('count');
+            $operationalEfficiency = $totalCartes > 0 ? round(($fonctionnelCount / $totalCartes) * 100, 2) : 0;
 
             // Get replacement trends by rame within date range
             $replacementsByRame = DB::select("
@@ -81,7 +73,7 @@ class DashboardController extends Controller
                 WHERE rc.DATE_REMPLACEMENT BETWEEN ? AND ?
                 GROUP BY ra.id, ra.NUMERO_RAME, ra.TYPE_RAME, year, month
                 ORDER BY ra.NUMERO_RAME, year DESC, month DESC
-            ", [$startDate, $endDate]);            // Get carte status distribution by rame (filtered by date range activity)
+            ", [$startDate, $endDate]);            // Get carte status distribution by rame (current status of all cartes)
             $carteStatusByRame = DB::select("
                 SELECT 
                     ra.id as rame_id,
@@ -93,20 +85,9 @@ class DashboardController extends Controller
                 LEFT JOIN raks r ON ra.id = r.ID_RAME
                 LEFT JOIN cartes c ON r.id = c.ID_RAK
                 WHERE c.STATU_CARTE IS NOT NULL
-                AND (
-                    c.id IN (
-                        SELECT DISTINCT ID_CARTE_ANCIENNE FROM remplacement_cartes 
-                        WHERE DATE_REMPLACEMENT BETWEEN ? AND ?
-                    )
-                    OR c.id IN (
-                        SELECT DISTINCT ID_CARTE_NOUVELLE FROM remplacement_cartes 
-                        WHERE DATE_REMPLACEMENT BETWEEN ? AND ?
-                    )
-                    OR c.updated_at BETWEEN ? AND ?
-                )
                 GROUP BY ra.id, ra.NUMERO_RAME, ra.TYPE_RAME, c.STATU_CARTE
                 ORDER BY ra.NUMERO_RAME, c.STATU_CARTE
-            ", [$startDate, $endDate, $startDate, $endDate, $startDate, $endDate]);            // Get recent activity (filtered by date range)
+            ");// Get recent activity (filtered by date range)
             $recentReplacements = RemplacementCarte::with([
                     'carteAncienne:id,REFERENCE_CARTE,ID_RAK',
                     'carteAncienne.rak:id,NOM_RAK,ID_RAME',
@@ -122,18 +103,17 @@ class DashboardController extends Controller
             $upcomingMaintenances = Rame::where('PROCHAINE_MAINTENANCE', '<=', Carbon::now()->addDays(30))
                 ->where('PROCHAINE_MAINTENANCE', '>=', Carbon::now())
                 ->orderBy('PROCHAINE_MAINTENANCE')
-                ->get(['id', 'NUMERO_RAME', 'TYPE_RAME', 'PROCHAINE_MAINTENANCE']);            // Get failure rate by month (filtered by date range)
-            $monthlyFailures = Carte::select(
-                    DB::raw('YEAR(updated_at) as year'),
-                    DB::raw('MONTH(updated_at) as month'),
-                    DB::raw('COUNT(*) as count')
-                )
-                ->whereIn('STATU_CARTE', ['En panne', 'hors service'])
-                ->whereBetween('updated_at', [$startDate, $endDate])
-                ->groupBy('year', 'month')
-                ->orderBy('year', 'desc')
-                ->orderBy('month', 'desc')
-                ->get();// Get motrice distribution
+                ->get(['id', 'NUMERO_RAME', 'TYPE_RAME', 'PROCHAINE_MAINTENANCE']);            // Get failure/maintenance rate by month (filtered by date range)
+            $monthlyFailures = DB::select("
+                SELECT 
+                    YEAR(rc.DATE_REMPLACEMENT) as year,
+                    MONTH(rc.DATE_REMPLACEMENT) as month,
+                    COUNT(*) as count
+                FROM remplacement_cartes rc
+                WHERE rc.DATE_REMPLACEMENT BETWEEN ? AND ?
+                GROUP BY YEAR(rc.DATE_REMPLACEMENT), MONTH(rc.DATE_REMPLACEMENT)
+                ORDER BY year DESC, month DESC
+            ", [$startDate, $endDate]);// Get motrice distribution
             $motriceDistribution = Rak::select('MOTRICE', DB::raw('count(*) as count'))
                 ->groupBy('MOTRICE')
                 ->get()

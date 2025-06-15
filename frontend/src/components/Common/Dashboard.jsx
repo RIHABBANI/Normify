@@ -98,13 +98,26 @@ export default function Dashboard() {
       default:
         return;
     }
-    
-    setDateFilters({ startDate, endDate });
+      setDateFilters({ startDate, endDate });
     setActiveFilter(period);
     fetchDashboardData(startDate, endDate);
-  };// Chart configurations
+  };
+
+  // Standardized status configuration for consistency across charts
+  const STATUS_CONFIG = {
+    order: ['fonctionnel', 'en panne', 'en maintenance', 'hors service'],
+    colors: ["#22C55E", "#EF4444", "#F59E0B", "#6B7280"],
+    labels: {
+      'fonctionnel': 'Fonctionnel',
+      'en panne': 'En panne', 
+      'en maintenance': 'En maintenance',
+      'hors service': 'Hors service'
+    }
+  };
+
+  // Chart configurations
   const getReplacementTrendChart = () => {
-    if (!stats?.monthly_replacements) return null;
+    if (!stats?.monthly_replacements || stats.monthly_replacements.length === 0) return null;
 
     const monthNames = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'];
     const data = stats.monthly_replacements.map(item => item.count);
@@ -211,11 +224,9 @@ export default function Dashboard() {
         legend: {
           position: 'top',
           horizontalAlign: 'left'
-        }
-      }
+        }      }
     };
   };
-
   const getStatusDistributionByRameChart = () => {
     if (!stats?.carte_status_by_rame) return null;
 
@@ -228,15 +239,13 @@ export default function Dashboard() {
       rameData[item.NUMERO_RAME][item.STATU_CARTE] = item.count;
     });
 
-    const statusTypes = ['Fonctionnel', 'En panne', 'En maintenance', 'hors service'];
     const rameNumbers = Object.keys(rameData).sort();
     
-    const series = statusTypes.map(status => ({
-      name: status,
+    // Use standardized status configuration
+    const series = STATUS_CONFIG.order.map(status => ({
+      name: STATUS_CONFIG.labels[status],
       data: rameNumbers.map(rame => rameData[rame][status] || 0)
     }));
-
-    const colors = ["#22C55E", "#EF4444", "#F59E0B", "#6B7280"];
 
     return {
       type: "bar",
@@ -248,7 +257,7 @@ export default function Dashboard() {
           stacked: true,
           toolbar: { show: false }
         },
-        colors: colors,
+        colors: STATUS_CONFIG.colors,
         plotOptions: {
           bar: {
             horizontal: false,
@@ -268,10 +277,9 @@ export default function Dashboard() {
           labels: {
             style: { colors: "#616161", fontSize: "12px" }
           }
-        },
-        legend: {
+        },        legend: {
           position: 'top',
-          horizontalAlign: 'left'
+          horizontalAlign: 'center'
         },
         fill: {
           opacity: 1
@@ -286,14 +294,21 @@ export default function Dashboard() {
         }
       }
     };
-  };
-
-  const getStatusDistributionChart = () => {
+  };  const getStatusDistributionChart = () => {
     if (!stats?.carte_status_distribution) return null;
 
     const statusData = stats.carte_status_distribution;
-    const series = Object.values(statusData).map(item => item.count);
-    const labels = Object.keys(statusData);
+    
+    // Use standardized status configuration and always show all statuses (even with 0 count)
+    const orderedData = STATUS_CONFIG.order.map(status => ({
+      status: status,
+      label: STATUS_CONFIG.labels[status],
+      count: statusData[status]?.count || 0
+    })); // Remove filter to always show all statuses
+
+    const series = orderedData.map(item => item.count);
+    const labels = orderedData.map(item => item.label);
+    const colors = STATUS_CONFIG.colors; // Use colors in order
 
     return {
       type: "donut",
@@ -302,8 +317,14 @@ export default function Dashboard() {
       options: {
         chart: { type: 'donut' },
         labels: labels,
-        colors: ["#22C55E", "#EF4444", "#F59E0B", "#6B7280"],
-        legend: { position: 'bottom' },
+        colors: colors,
+        legend: { 
+          position: 'bottom',
+          horizontalAlign: 'center',
+          floating: false,
+          fontSize: '14px',
+          offsetY: 0
+        },
         plotOptions: {
           pie: {
             donut: {
@@ -348,7 +369,7 @@ export default function Dashboard() {
 
     return {
       type: "bar",
-      height: 350,
+      height: 400,
       series: [{
         name: "Remplacements",
         data: series
@@ -361,8 +382,8 @@ export default function Dashboard() {
         colors: colors.slice(0, series.length),
         plotOptions: {
           bar: {
-            horizontal: true,
-            columnWidth: '70%',
+            horizontal: false,
+            columnWidth: '60%',
             endingShape: 'rounded'
           }
         },
@@ -376,17 +397,21 @@ export default function Dashboard() {
         },
         xaxis: {
           categories: labels,
-          labels: {
-            style: { colors: "#616161", fontSize: "11px" }
-          }
-        },
-        yaxis: {
           title: {
             text: 'Causes Techniques'
           },
           labels: {
-            style: { colors: "#616161", fontSize: "11px" },
-            maxWidth: 200
+            style: { colors: "#616161", fontSize: "10px" },
+            rotate: -45,
+            maxHeight: 120
+          }
+        },
+        yaxis: {
+          title: {
+            text: 'Nombre de Remplacements'
+          },
+          labels: {
+            style: { colors: "#616161", fontSize: "12px" }
           }
         },
         grid: {
@@ -586,6 +611,30 @@ export default function Dashboard() {
         </Card>
       </div>
 
+      {/* Replacement by Cause Chart - Primary Chart */}
+      <div className="grid grid-cols-1 gap-6">
+        <Card>
+          <CardHeader
+            floated={false}
+            shadow={false}
+            color="transparent"
+            className="flex flex-col gap-4 rounded-none md:flex-row md:items-center"
+          >
+            <div className="w-max rounded-lg bg-red-500 p-2 text-white">
+              <ExclamationTriangleIcon className="h-6 w-6" />
+            </div>
+            <div>
+              <Typography variant="h6" color="blue-gray">
+                Remplacements par Cause Technique (Période Sélectionnée)
+              </Typography>
+            </div>
+          </CardHeader>
+          <CardBody className="px-2 pb-0">
+            {getReplacementsByCauseChart() && <Chart {...getReplacementsByCauseChart()} />}
+          </CardBody>
+        </Card>
+      </div>
+
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Replacement Trend Chart */}
@@ -603,8 +652,7 @@ export default function Dashboard() {
                 Tendance des Remplacements (Période Sélectionnée)
               </Typography>
             </div>
-          </CardHeader>
-          <CardBody className="px-2 pb-0">
+          </CardHeader>          <CardBody className="px-2 pb-0">
             {getReplacementTrendChart() && <Chart {...getReplacementTrendChart()} />}
           </CardBody>
         </Card>
@@ -763,8 +811,7 @@ export default function Dashboard() {
             </div>
           </CardBody>
         </Card>
-      </div>
-
+      </div>      
       {/* Performance Metrics */}
       {/* {performance && (
         <Card>
@@ -793,8 +840,7 @@ export default function Dashboard() {
                   Temps Moyen Entre Pannes (MTBF)
                 </Typography>
               </div>
-              <div className="text-center p-4 bg-green-50 rounded-lg">
-                <Typography variant="h4" className="text-green-600 font-bold">
+              <div className="text-center p-4 bg-green-50 rounded-lg">                <Typography variant="h4" className="text-green-600 font-bold">
                   {performance.availability_percentage}%
                 </Typography>
                 <Typography className="text-gray-600 text-sm">
@@ -811,31 +857,8 @@ export default function Dashboard() {
               </div>
             </div>
           </CardBody>
-        </Card>
-      )} */}
-      {/* Replacement by Cause Chart */}
-      <div className="grid grid-cols-1 gap-6">
-        <Card>
-          <CardHeader
-            floated={false}
-            shadow={false}
-            color="transparent"
-            className="flex flex-col gap-4 rounded-none md:flex-row md:items-center"
-          >
-            <div className="w-max rounded-lg bg-red-500 p-2 text-white">
-              <ExclamationTriangleIcon className="h-6 w-6" />
-            </div>
-            <div>
-              <Typography variant="h6" color="blue-gray">
-                Remplacements par Cause Technique (Période Sélectionnée)
-              </Typography>
-            </div>
-          </CardHeader>
-          <CardBody className="px-2 pb-0">
-            {getReplacementsByCauseChart() && <Chart {...getReplacementsByCauseChart()} />}
-          </CardBody>
-        </Card>
-      </div>
+        </Card>      )} */}
     </div>
   );
 }
+

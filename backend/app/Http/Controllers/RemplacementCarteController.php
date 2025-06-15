@@ -53,11 +53,10 @@ class RemplacementCarteController extends Controller
                 // Use existing carte
                 $nouvelleCarte = Carte::findOrFail($validated['ID_CARTE_NOUVELLE']);
             }
-            
-            // Always mark old carte as "hors service" regardless of replacement type
-            // The RAISON_REMPLACEMENT indicates why it was replaced (en panne, en maintenance, etc.)
+              // Update old carte status to the reason for replacement
+            // The RAISON_REMPLACEMENT indicates the actual status (en panne, en maintenance, hors service, etc.)
             $oldCarte->update([
-                'STATU_CARTE' => 'hors service'
+                'STATU_CARTE' => $validated['RAISON_REMPLACEMENT']
             ]);
               // Create the replacement with reason included in observations
             $observations = $validated['OBSERVATIONS'] ?? '';
