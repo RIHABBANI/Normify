@@ -318,6 +318,7 @@ export const RameDetails = () => {
                                         <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Carte Remplacée</th>
                                         <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Nouvelle Carte</th>
                                         <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Rack</th>
+                                        <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Motrice</th>
                                         <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Cause Technique</th>
                                         <th scope="col" className="px-6 py-3 text-sm font-medium text-gray-700">Observations</th>
                                     </tr>
@@ -332,7 +333,8 @@ export const RameDetails = () => {
                                         >
                                             <td className="px-6 py-3">
                                                 {formatDate(remplacement.DATE_REMPLACEMENT)}
-                                            </td>                                            <td className="px-6 py-3">
+                                            </td>                                            
+                                            <td className="px-6 py-3">
                                                 {remplacement.carte_ancienne.REFERENCE_CARTE || 'N/A'}
                                             </td>
                                             <td className="px-6 py-3">
@@ -340,6 +342,9 @@ export const RameDetails = () => {
                                             </td>
                                             <td className="px-6 py-3">
                                                 {remplacement.carte_ancienne.rak.NOM_RAK || 'N/A'}
+                                            </td>
+                                            <td className="px-6 py-3">
+                                                {remplacement.carte_ancienne.rak.MOTRICE || 'N/A'}
                                             </td>
                                             <td className="px-6 py-3">
                                                 <span className={`px-2 py-1 rounded-full text-xs font-medium ${
