@@ -581,7 +581,7 @@ export const CartesTable = () => {    const navigate = useNavigate();
                                     name="NOM_CARTE"
                                     value={formData.NOM_CARTE} 
                                     onChange={handleInputChange}
-                                    placeholder="Nom optionnel de la carte"
+                                    placeholder="Nom de la carte"
                                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                                 />
                             </div>
@@ -694,7 +694,7 @@ export const CartesTable = () => {    const navigate = useNavigate();
                                     name="NOM_CARTE"
                                     value={formData.NOM_CARTE} 
                                     onChange={handleInputChange}
-                                    placeholder="Nom optionnel de la carte"
+                                    placeholder="Nom de la carte"
                                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                                 />
                             </div>
