@@ -597,7 +597,7 @@ export const RaksTable = () => {    const navigate = useNavigate();
                                     required
                                 >
                                     <option value="M">M</option>
-                                    <option value="R">R</option>
+                                    <option value="MH">MH</option>
                                 </select>
                             </div>
 
