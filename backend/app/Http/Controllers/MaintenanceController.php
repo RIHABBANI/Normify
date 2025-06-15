@@ -19,7 +19,7 @@ class MaintenanceController extends Controller
     {
         $validated = $request->validate([
             'DATE_MAINTENANCE' => 'required|date',
-            'SIGNALEMENT_MAINTENANCE' => 'required|strin',
+            'SIGNALEMENT_MAINTENANCE' => 'required|string',
             'ANOMALIE_MAINTENANCE' => 'required|string',
             'ORGANE_MAINTENANCE' => 'required|string',
         ]);
