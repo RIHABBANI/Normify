@@ -11,8 +11,8 @@ return new class extends Migration
         Schema::create('maintenances', function (Blueprint $table) {
             $table->id();
             $table->date('DATE_MAINTENANCE');
-            $table->string('SIGNALEMENT_MAINTENANCE');
-            $table->string('ANOMALIE_MAINTENANCE');
+            $table->text('SIGNALEMENT_MAINTENANCE');
+            $table->text('ANOMALIE_MAINTENANCE');
             $table->string('ORGANE_MAINTENANCE');
             $table->timestamps();
         });

@@ -20,7 +20,7 @@ class InterventionController extends Controller
     {
         $validated = $request->validate([
             'DATE_INTERVENTION' => 'required|date',
-            'MOTIF' => 'required|string|max:255',
+            'MOTIF' => 'required|string',
             'TRAVAUX' => 'required|string'
         ]);
 
