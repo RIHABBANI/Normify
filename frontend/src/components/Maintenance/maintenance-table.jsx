@@ -318,19 +318,18 @@ export const MaintenanceTable = () => {
                                             className={`${index % 2 === 0 ? "bg-white" : "bg-gray-50"} border-b border-gray-200 hover:bg-blue-50 transition-all duration-150 cursor-pointer`}
                                             onClick={() => handleMaintenanceClick(maintenance)}
                                         >
-                                            <td className="px-6 py-3">{formatDate(maintenance.DATE_MAINTENANCE)}</td>
-                                            <td className="px-6 py-3">
-                                                <div className="max-w-xs truncate" title={maintenance.SIGNALEMENT_MAINTENANCE}>
+                                            <td className="px-6 py-3">{formatDate(maintenance.DATE_MAINTENANCE)}</td>                                            <td className="px-6 py-3">
+                                                <div className="max-w-xs break-words whitespace-pre-wrap">
                                                     {maintenance.SIGNALEMENT_MAINTENANCE}
                                                 </div>
                                             </td>
                                             <td className="px-6 py-3">
-                                                <div className="max-w-xs truncate" title={maintenance.ANOMALIE_MAINTENANCE}>
+                                                <div className="max-w-xs break-words whitespace-pre-wrap">
                                                     {maintenance.ANOMALIE_MAINTENANCE}
                                                 </div>
                                             </td>
                                             <td className="px-6 py-3">
-                                                <div className="max-w-xs truncate" title={maintenance.ORGANE_MAINTENANCE}>
+                                                <div className="max-w-xs break-words whitespace-pre-wrap">
                                                     {maintenance.ORGANE_MAINTENANCE}
                                                 </div>
                                             </td>

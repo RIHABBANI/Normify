@@ -324,10 +324,16 @@ export const InterventionsTable = () => {
                                             key={intervention.id || index}
                                             className={`${index % 2 === 0 ? "bg-white" : "bg-gray-50"} border-b border-gray-200 hover:bg-blue-50 transition-all duration-150 cursor-pointer`}
                                             onClick={() => handleInterventionClick(intervention)}
-                                        >
-                                            <td className="px-6 py-3">{formatDate(intervention.DATE_INTERVENTION)}</td>
-                                            <td className="px-6 py-3">{intervention.MOTIF}</td>
-                                            <td className="px-6 py-3">{intervention.TRAVAUX}</td>
+                                        >                                            <td className="px-6 py-3">{formatDate(intervention.DATE_INTERVENTION)}</td>
+                                            <td className="px-6 py-3">
+                                                <div className="max-w-xs break-words whitespace-pre-wrap">
+                                                    {intervention.MOTIF}
+                                                </div>
+                                            </td>                                            <td className="px-6 py-3">
+                                                <div className="w-full break-words whitespace-pre-wrap">
+                                                    {intervention.TRAVAUX}
+                                                </div>
+                                            </td>
                                             <td className="px-6 py-3">
                                                 <div className="flex space-x-3">
                                                     <button 
