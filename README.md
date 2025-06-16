@@ -1,4 +1,4 @@
-# Normify
+# GMAO
 
 
 # Create new project

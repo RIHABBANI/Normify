@@ -13,7 +13,7 @@ const Sidebar = () => {
             <aside className="fixed top-0 left-0 z-40 w-48 h-screen border transition-transform -translate-x-full sm:translate-x-0 bg-white" aria-label="Sidebar">
                 <div className="flex items-center justify-center py-4">
                     <Link to="/dashboard" className="flex items-center">
-                        <span className="self-center text-xl font-semibold whitespace-nowrap text-gray-800">Normify</span>
+                        <span className="self-center text-xl font-semibold whitespace-nowrap text-gray-800">GMAO</span>
                     </Link>
                 </div>                <div className="h-full px-3 py-4 overflow-y-auto bg-white">
                     <ul className="space-y-2 font-medium">

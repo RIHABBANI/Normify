@@ -1,6 +1,6 @@
 # GMAO Database Seeders
 
-This directory contains comprehensive seeders based on the `gmao_db (1).sql` file. The seeders populate the database with realistic test data for the Normify GMAO system.
+This directory contains comprehensive seeders based on the `gmao_db (1).sql` file. The seeders populate the database with realistic test data for the GMAO GMAO system.
 
 ## Seeders Overview
 
@@ -10,7 +10,7 @@ This directory contains comprehensive seeders based on the `gmao_db (1).sql` fil
 - Creates system users with different roles
 - Includes admin, technician, operator, and supervisor users
 - **Sample Users:**
-  - admin@normify.com (admin/admin)
+  - admin@gmao.com (admin/admin)
   - rihab.bani@uit.ac.ma (admin/password)
   - Multiple technical staff accounts
 

@@ -46,7 +46,7 @@ export const Login = () => {
     <>
         <div className="flex justify-center items-center h-screen bg-gray-100">
           <div className="p-6 rounded-lg shadow-lg bg-white max-w-md w-full">
-            <h2 className="text-center mb-6 text-2xl font-semibold">Normify</h2>
+            <h2 className="text-center mb-6 text-2xl font-semibold">GMAO</h2>
             {error && <p className="text-red-500 text-center">{error}</p>}
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
